@@ -1,0 +1,37 @@
+:root {
+  /* 侧边栏 */
+  --left-menu-max-width: 220px;
+  --left-menu-min-width: 64px;
+  --left-menu-bg-color: #fff;
+  --left-menu-bg-active-color: rgba(64, 158, 255, 0.1);
+  --left-menu-text-color: #252525;
+  --left-menu-text-active-color: var(--el-color-primary);
+  --left-menu-collapse-bg-active-color: rgba(64, 158, 255, 0.1);
+
+  /* 侧边栏-logo */
+  --logo-height: 50px;
+
+  --logo-title-text-color: #252525;
+
+  /* 顶部栏-tags */
+  --tags-view-height: 35px;
+
+  /* 顶部栏-header */
+  --top-header-bg-color: #fff;
+  --top-header-text-color: inherit;
+  --top-header-hover-color: #f6f6f6;
+  --top-tool-height: var(--logo-height);
+
+  /* app-content */
+  --app-content-padding: 20px;
+  --app-content-bg-color: #f5f7f9;
+
+  /* app-footer */
+  --app-footer-height: 50px;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
