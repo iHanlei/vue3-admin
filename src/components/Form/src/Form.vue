@@ -69,58 +69,71 @@ export default defineComponent({
       type: [String, Number],
       default: "auto",
     },
+    // 表单验证规则
     rules: {
       type: Object as PropType<FormRules>,
       default: () => ({}),
     },
+    // 表单标签位置
     labelPosition: {
       validator(value: string) {
         return ["left", "right", "top"].includes(value)
       },
       default: "right",
     },
+    // 表单标签后缀
     labelSuffix: {
       type: String,
       default: "",
     },
+    // 是否隐藏必填星号
     hideRequiredAsterisk: {
       type: Boolean,
       default: false,
     },
+    // 必填星号位置
     requireAsteriskPosition: {
       validator(value: string) {
         return ["left", "right"].includes(value)
       },
       default: "left",
     },
+    // 是否显示验证信息
     showMessage: {
       type: Boolean,
       default: true,
     },
+    // 是否显示内联验证信息
     inlineMessage: {
       type: Boolean,
       default: false,
     },
+    // 是否显示验证状态图标
     statusIcon: {
       type: Boolean,
       default: false,
     },
+    // 规则变化时是否立即验证
     validateOnRuleChange: {
       type: Boolean,
       default: true,
     },
+    // 组件尺寸
     size: {
       type: String as PropType<ComponentSize>,
       default: undefined,
     },
+    // 是否禁用
     disabled: {
       type: Boolean,
       default: false,
     },
+    // 是否在验证失败时滚动到错误位置
     scrollToError: {
       type: Boolean,
       default: false,
     },
+    // 滚动到错误位置的偏移量
     scrollToErrorOffset: {
       type: [Boolean, Object],
       default: undefined,
@@ -131,23 +144,26 @@ export default defineComponent({
     // element form 实例
     const elFormRef = ref<ComponentRef<typeof ElForm>>()
 
+    // 合并后的属性
     const mergeProps = ref<FormProps>({})
 
+    // 计算属性
     const getProps = computed(() => {
       const propsObj = { ...props }
       Object.assign(propsObj, unref(mergeProps))
       return propsObj
     })
 
-    // 存储表单实例
+    // 存储表单组件实例
     const formComponents = ref({})
 
-    // 存储form-item实例
+    // 存储form-item组件实例
     const formItemComponents = ref({})
 
     // 表单数据
     const formModel = ref<Recordable>(props.model)
 
+    // 组件挂载时触发
     onMounted(() => {
       emit("register", unref(elFormRef)?.$parent, unref(elFormRef))
     })
@@ -157,19 +173,21 @@ export default defineComponent({
       formModel.value = Object.assign(unref(formModel), data)
     }
 
+    // 设置表单属性
     const setProps = (props: FormProps = {}) => {
       mergeProps.value = Object.assign(unref(mergeProps), props)
     }
 
+    // 删除schema
     const delSchema = (field: string) => {
       const { schema } = unref(getProps)
-
       const index = findIndex(schema, (v: FormSchema) => v.field === field)
       if (index > -1) {
         schema.splice(index, 1)
       }
     }
 
+    // 添加schema
     const addSchema = (formSchema: FormSchema, index?: number) => {
       const { schema } = unref(getProps)
       if (index !== void 0) {
@@ -179,6 +197,7 @@ export default defineComponent({
       schema.push(formSchema)
     }
 
+    // 设置schema
     const setSchema = (schemaProps: FormSetProps[]) => {
       const { schema } = unref(getProps)
       for (const v of schema) {
@@ -190,44 +209,27 @@ export default defineComponent({
       }
     }
 
-    const getOptions = async (fn: Function, item: FormSchema) => {
-      const options = await fn()
-      setSchema([
-        {
-          field: item.field,
-          path:
-            item.component === ComponentNameEnum.TREE_SELECT || item.component === ComponentNameEnum.TRANSFER
-              ? "componentProps.data"
-              : "componentProps.options",
-          value: options,
-        },
-      ])
-    }
-
-    /**
-     * @description: 获取表单组件实例
-     * @param filed 表单字段
-     */
+    // 获取表单组件实例
     const getComponentExpose = (filed: string) => {
       return unref(formComponents)[filed]
     }
 
-    /**
-     * @description: 获取formItem实例
-     * @param filed 表单字段
-     */
+    // 获取formItem组件实例
     const getFormItemExpose = (filed: string) => {
       return unref(formItemComponents)[filed]
     }
 
+    // 设置组件引用映射
     const setComponentRefMap = (ref: any, filed: string) => {
       formComponents.value[filed] = ref
     }
 
+    // 设置表单项引用映射
     const setFormItemRefMap = (ref: any, filed: string) => {
       formItemComponents.value[filed] = ref
     }
 
+    // 暴露的方法
     expose({
       setValues,
       formModel,
@@ -278,6 +280,21 @@ export default defineComponent({
             renderFormItem(item)
           )
         })
+    }
+
+    // 获取选项方法
+    const getOptions = async (fn: Function, item: FormSchema) => {
+      const options = await fn()
+      setSchema([
+        {
+          field: item.field,
+          path:
+            item.component === ComponentNameEnum.TREE_SELECT || item.component === ComponentNameEnum.TRANSFER
+              ? "componentProps.data"
+              : "componentProps.options",
+          value: options,
+        },
+      ])
     }
 
     // 渲染formItem
@@ -419,6 +436,7 @@ export default defineComponent({
       return props as FormProps
     }
 
+    
     return () => (
       <ElForm
         ref={elFormRef}

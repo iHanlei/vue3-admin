@@ -7,26 +7,32 @@ const emit = defineEmits(["search", "reset", "expand"])
 const { t } = useI18n()
 
 defineProps({
+  // 是否显示搜索按钮
   showSearch: {
     type: Boolean,
     default: true,
   },
+  // 是否显示重置按钮
   showReset: {
     type: Boolean,
     default: true,
   },
+  // 是否显示展开/收起按钮
   showExpand: {
     type: Boolean,
     default: false,
   },
+  // 展开/收起状态
   visible: {
     type: Boolean,
     default: true,
   },
+  // 搜索按钮加载状态
   searchLoading: {
     type: Boolean,
     default: false,
   },
+  // 重置按钮加载状态
   resetLoading: {
     type: Boolean,
     default: false,

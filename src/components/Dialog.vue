@@ -6,18 +6,22 @@ import { isNumber } from "@/utils/is"
 const slots = useSlots()
 
 const props = defineProps({
+  // 对话框是否显示
   modelValue: {
     type: Boolean,
     default: false,
   },
+  // 标题
   title: {
     type: String,
     default: "",
   },
+  // 是否全屏显示
   fullscreen: {
     type: Boolean,
     default: false,
   },
+  // 最大高度
   maxHeight: {
     type: [String, Number],
     default: "400px",
@@ -36,14 +40,18 @@ const getBindValue = computed(() => {
   return obj
 })
 
+// 是否全屏
 const isFullscreen = ref(false)
 
+// 切换全屏
 const toggleFull = () => {
   isFullscreen.value = !unref(isFullscreen)
 }
 
+// 对话框高度
 const dialogHeight = ref(isNumber(props.maxHeight) ? `${props.maxHeight}px` : props.maxHeight)
 
+// 监听 isFullscreen 变化，并根据情况调整对话框高度
 watch(
   () => isFullscreen.value,
   async (val: boolean) => {
@@ -60,6 +68,7 @@ watch(
   }
 )
 
+// 计算对话框样式，根据动态高度
 const dialogStyle = computed(() => {
   return {
     height: unref(dialogHeight),

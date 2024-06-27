@@ -9,21 +9,22 @@ const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('icon')
 
 const props = defineProps({
-  // icon name
+  // icon标识
   icon: {
     type: String,
     required: true,
     default: "",
   },
-  // icon color
+  // icon颜色
   color: {
     type: String,
   },
+  // hover颜色
   hoverColor: {
     type: String,
     default: "",
   },
-  // icon size
+  // icon大小
   size: {
     type: Number,
     default: 16,
