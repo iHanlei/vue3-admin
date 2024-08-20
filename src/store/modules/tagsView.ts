@@ -154,8 +154,7 @@ export const useTagsViewStore = defineStore('tagsView', {
         }
       }
     }
-  },
-  persist: false
+  }
 })
 
 export const useTagsViewStoreWithOut = () => {

@@ -34,4 +34,12 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+
+  .el-steps--vertical {
+    height: auto;
+    
+    .el-step__description {
+      padding-right: 0;
+    }
+  }
 }

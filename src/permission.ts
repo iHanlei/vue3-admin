@@ -1,53 +1,47 @@
-import router from "./router"
-import { useAppStoreWithOut } from "@/store/modules/app"
-import type { RouteRecordRaw } from "vue-router"
-import { useTitle } from "@/hooks/useTitle"
-import { useNProgress } from "@/hooks/useNProgress"
-import { usePermissionStoreWithOut } from "@/store/modules/permission"
-import { usePageLoading } from "@/hooks/usePageLoading"
-import { useUserStoreWithOut } from "@/store/modules/user"
-import { AppCustomRouteRecordRaw } from "./router/types"
+import router from './router'
+import type { RouteRecordRaw } from 'vue-router'
+import { useTitle } from '@/hooks/useTitle'
+import { useNProgress } from '@/hooks/useNProgress'
+import { usePermissionStoreWithOut } from '@/store/modules/permission'
+import { usePageLoading } from '@/hooks/usePageLoading'
+import { useStorage } from './hooks/useStorage'
 
 const { start, done } = useNProgress()
 
 const { loadStart, loadDone } = usePageLoading()
 
+const { getStorage } = useStorage('sessionStorage')
+
 router.beforeEach(async (to, from, next) => {
   start()
   loadStart()
   const permissionStore = usePermissionStoreWithOut()
-  const appStore = useAppStoreWithOut()
-  const userStore = useUserStoreWithOut()
-  if (userStore.getUserInfo) {
-    if (to.path === "/login") {
-      next({ path: "/" })
+  if (getStorage('user')) {
+    if (to.path === '/login') {
+      next({ path: '/' })
     } else {
       if (permissionStore.getIsAddRouters) {
         next()
         return
       }
 
-      // 可根据实际情况进行修改
-      const roleRouters = userStore.getRoleRouters || []
+      await permissionStore.generateRoutes('static')
 
-      // 是否使用动态路由
-      if (appStore.getDynamicRouter) {
-        await permissionStore.generateRoutes("server", roleRouters as AppCustomRouteRecordRaw[])
-      } else {
-        await permissionStore.generateRoutes("static")
-      }
-
-      permissionStore.getAddRouters.forEach(route => {
+      permissionStore.getAddRouters.forEach((route) => {
         router.addRoute(route as unknown as RouteRecordRaw) // 动态添加可访问路由表
       })
+      permissionStore.setIsAddRouters(true)
       const redirectPath = from.query.redirect || to.path
       const redirect = decodeURIComponent(redirectPath as string)
-      const nextData = to.path === redirect ? { ...to, replace: true } : { path: redirect }
-      permissionStore.setIsAddRouters(true)
-      next(nextData)
+      // 避免重定向回当前路径，只有在路径确实不同的情况下才重定向
+      if (to.fullPath === redirect) {
+        next()
+      } else {
+        next({ path: redirect, replace: true }) // 添加 replace:true，避免在历史记录中重复
+      }
     }
   } else {
-    const noRedirectWhiteList = ["/login"]
+    const noRedirectWhiteList = ['/login']
     if (noRedirectWhiteList.indexOf(to.path) !== -1) {
       next()
     } else {
@@ -56,7 +50,7 @@ router.beforeEach(async (to, from, next) => {
   }
 })
 
-router.afterEach(to => {
+router.afterEach((to) => {
   useTitle(to?.meta?.title as string)
   done() // 结束Progress
   loadDone()

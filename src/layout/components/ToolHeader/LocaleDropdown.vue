@@ -20,12 +20,12 @@ const { locale } = useI18n()
 
 const { setStorage, getStorage } = useStorage("localStorage")
 
-const language = ref<string>(getStorage("lang") === "zh-CN" ? "繁體中文" : "English")
+const language = ref<string>(getStorage("lang") === "zh-CN" ? "简体中文" : "English")
 
 const setLang = (lang: "zh-CN" | "en") => {
   if (locale.value === lang) return
   locale.value = lang
-  language.value = lang === "zh-CN" ? "繁體中文" : "English"
+  language.value = lang === "zh-CN" ? "简体中文" : "English"
   setStorage("lang", lang)
   // 需要重新加载页面让整个系统都初始化
   // window.location.reload()
@@ -40,7 +40,7 @@ const setLang = (lang: "zh-CN" | "en") => {
     <template #dropdown>
       <ElDropdownMenu>
         <ElDropdownItem command="en">English</ElDropdownItem>
-        <ElDropdownItem command="zh-CN">繁體中文</ElDropdownItem>
+        <ElDropdownItem command="zh-CN">简体中文</ElDropdownItem>
       </ElDropdownMenu>
     </template>
   </ElDropdown>

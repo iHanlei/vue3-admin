@@ -1,19 +1,21 @@
 import { defineStore } from "pinia"
 import { store } from "../index"
-import { UserInfoType } from "@/api/user/types"
 import { ElMessageBox } from "element-plus"
 import i18n from '@/locales'
 import { useTagsViewStore } from "./tagsView"
 import router from "@/router"
 import { AppCustomRouteRecordRaw } from "@/router/types"
+import { useStorage } from "@/hooks/useStorage"
 
 interface UserState {
-  userInfo?: UserInfoType
+  userInfo?: any
   tokenKey: string
   token: string
   roleRouters?: string[] | AppCustomRouteRecordRaw[]
   rememberMe: boolean
 }
+
+const { setStorage } = useStorage('sessionStorage')
 
 export const useUserStore = defineStore("user", {
   state: (): UserState => {
@@ -33,7 +35,7 @@ export const useUserStore = defineStore("user", {
     getToken(): string {
       return this.token
     },
-    getUserInfo(): UserInfoType | undefined {
+    getUserInfo(): any | undefined {
       return this.userInfo
     },
     getRoleRouters(): string[] | AppCustomRouteRecordRaw[] | undefined {
@@ -50,8 +52,9 @@ export const useUserStore = defineStore("user", {
     setToken(token: string) {
       this.token = token
     },
-    setUserInfo(userInfo?: UserInfoType) {
+    setUserInfo(userInfo?: any) {
       this.userInfo = userInfo
+      setStorage('user', userInfo)
     },
     setRoleRouters(roleRouters: string[] | AppCustomRouteRecordRaw[]) {
       this.roleRouters = roleRouters
@@ -83,7 +86,6 @@ export const useUserStore = defineStore("user", {
       this.rememberMe = rememberMe
     },
   },
-  persist: true,
 })
 
 export const useUserStoreWithOut = () => {

@@ -8,29 +8,45 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/',
     component: Layout,
-    redirect: '/home/dashboard',
+    redirect: '/work-order',
     name: 'Root',
     meta: {
       hidden: true
     }
   },
   {
-    path: '/home',
+    path: '/work-order',
     component: Layout,
-    name: 'Home',
+    redirect: '/work-order/list',
+    name: 'WorkOrderManagement',
     meta: {
-      title: 'router.home',
-      icon: 'ant-design:dashboard-outlined',
-      alwaysShow: true
+      title: 'router.workOrderManagement',
+      icon: 'fluent:task-list-square-16-regular'
     },
     children: [
       {
-        path: 'dashboard',
-        name: 'Dashboard',
-        component: () => import('@/views/Home/Dashboard.vue'),
+        path: 'list',
+        name: 'WorkOrderList',
+        component: () => import('@/views/WorkOrder/WorkOrderList.vue'),
         meta: {
-          title: 'router.dashboard'
-        },
+          title: 'router.workOrderList'
+        }
+      },
+      {
+        path: 'handle',
+        name: 'HandleWorkOrder',
+        component: () => import('@/views/WorkOrder/HandleWorkOrder.vue'),
+        meta: {
+          title: 'router.handleWorkOrder'
+        }
+      },
+      {
+        path: 'my',
+        name: 'MyWorkOrder',
+        component: () => import('@/views/WorkOrder/MyWorkOrder.vue'),
+        meta: {
+          title: 'router.myWorkOrder'
+        }
       },
     ]
   },
@@ -72,7 +88,7 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
     }
   },
   {
-    path: '/404',
+    path: '/:pathMatch(.*)*',
     component: () => import('@/views/Error/404.vue'),
     name: '404Page',
     meta: {
@@ -93,8 +109,7 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
   }
 ]
 
-export const asyncRouterMap: AppRouteRecordRaw[] = [
-]
+export const asyncRouterMap: AppRouteRecordRaw[] = []
 
 const router = createRouter({
   history: createWebHashHistory(),

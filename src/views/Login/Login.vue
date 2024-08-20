@@ -1,32 +1,35 @@
 <script setup lang="ts">
 import { reactive, ref, watch } from "vue"
 import type { FormInstance, FormRules } from "element-plus"
-import type { LoginType } from "@/api/user/types"
 import { useStorage } from "@/hooks/useStorage"
-import { usePermissionStore } from "@/store/modules/permission"
-import { RouteLocationNormalizedLoaded, RouteRecordRaw, useRouter } from "vue-router"
-import { useAppStore } from "@/store/modules/app"
+import { RouteLocationNormalizedLoaded, useRouter } from "vue-router"
 import { useUserStore } from "@/store/modules/user"
 import { useValidator } from "@/hooks/useValidator"
 import { useI18n } from "vue-i18n"
+import CryptoJS from 'crypto-js'
 
 const { t } = useI18n()
 
-const permissionStore = usePermissionStore()
-
-const { currentRoute, addRoute, push } = useRouter()
-
-const appStore = useAppStore()
+const { currentRoute, push } = useRouter()
 
 const userStore = useUserStore()
 
 const formRef = ref<FormInstance>()
 
-const { setStorage, getStorage, removeStorage } = useStorage("localStorage")
-const localUsername = ref<string>(getStorage("lu") || "")
-const localPassword = ref<string>(getStorage("lp") || "")
+const passphrase = 'PlanX-Party'
+const { setStorage, getStorage, removeStorage } = useStorage('localStorage')
+const localUsername = ref<string>(
+  getStorage('lu')
+    ? CryptoJS.AES.decrypt(getStorage('lu'), passphrase).toString(CryptoJS.enc.Utf8)
+    : ''
+)
+const localPassword = ref<string>(
+  getStorage('lp')
+    ? CryptoJS.AES.decrypt(getStorage('lp'), passphrase).toString(CryptoJS.enc.Utf8)
+    : ''
+)
 
-const formData = reactive<LoginType>({
+const formData = reactive<any>({
   username: localUsername.value,
   password: localPassword.value,
 })
@@ -62,30 +65,19 @@ const signIn = () => {
       try {
         // 记住密码
         if (remember.value) {
-          setStorage("lu", formData.username)
-          setStorage("lp", formData.password)
-        } else {
-          removeStorage("lu")
-          removeStorage("lp")
-        }
+            setStorage('lu', CryptoJS.AES.encrypt(formData.username, passphrase).toString())
+            setStorage('lp', CryptoJS.AES.encrypt(formData.password, passphrase).toString())
+          } else {
+            removeStorage('lu')
+            removeStorage('lp')
+          }
 
         userStore.setUserInfo({
           userId: '1001',
           username: 'Evan'
         })
 
-        // 是否使用动态路由
-        if (appStore.getDynamicRouter) {
-          //...
-        } else {
-          await permissionStore.generateRoutes("static").catch(() => {})
-          // 动态添加可访问路由表
-          permissionStore.getAddRouters.forEach(route => {
-            addRoute(route as RouteRecordRaw)
-          })
-          permissionStore.setIsAddRouters(true)
-          push({ path: redirect.value || permissionStore.addRouters[0].path })
-        }
+        push({ path: redirect.value || '/' })
       } finally {
         loading.value = false
       }

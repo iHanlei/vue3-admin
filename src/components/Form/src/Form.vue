@@ -1,32 +1,38 @@
 <script lang="tsx">
-import { PropType, defineComponent, ref, computed, unref, watch, onMounted } from "vue"
+import { PropType, defineComponent, ref, computed, unref, watch, onMounted } from 'vue'
 import {
   ElForm,
   ElFormItem,
   ElRow,
   ElCol,
   FormRules,
-  ComponentSize,
+  ComponentSize
   // FormItemProp
-} from "element-plus"
-import { componentMap } from "./helper/componentMap"
-import { getSlot } from "@/utils/tsxHelper"
-import { setTextPlaceholder, setGridProp, setComponentProps, setItemComponentSlots, initModel } from "./helper"
-import { useRenderSelect } from "./components/useRenderSelect"
-import { useRenderRadio } from "./components/useRenderRadio"
-import { useRenderCheckbox } from "./components/useRenderCheckbox"
-import { useDesign } from "@/hooks/useDesign"
-import { findIndex } from "@/utils"
-import { get, set } from "lodash-es"
-import { FormProps } from "./types"
+} from 'element-plus'
+import { componentMap } from './helper/componentMap'
+import { getSlot } from '@/utils/tsxHelper'
+import {
+  setTextPlaceholder,
+  setGridProp,
+  setComponentProps,
+  setItemComponentSlots,
+  initModel
+} from './helper'
+import { useRenderSelect } from './components/useRenderSelect'
+import { useRenderRadio } from './components/useRenderRadio'
+import { useRenderCheckbox } from './components/useRenderCheckbox'
+import { useDesign } from '@/hooks/useDesign'
+import { findIndex } from '@/utils'
+import { get, set } from 'lodash-es'
+import { FormProps } from './types'
 import {
   FormSchema,
   FormSetProps,
   ComponentNameEnum,
   SelectComponentProps,
   RadioGroupComponentProps,
-  CheckboxGroupComponentProps,
-} from "./types"
+  CheckboxGroupComponentProps
+} from './types'
 
 const { renderSelectOptions } = useRenderSelect()
 const { renderRadioOptions } = useRenderRadio()
@@ -34,112 +40,112 @@ const { renderCheckboxOptions } = useRenderCheckbox()
 
 const { getPrefixCls } = useDesign()
 
-const prefixCls = getPrefixCls("form")
+const prefixCls = getPrefixCls('form')
 
 export default defineComponent({
-  name: "Form",
+  name: 'Form',
   props: {
     // 生成Form的布局结构数组
     schema: {
       type: Array as PropType<FormSchema[]>,
-      default: () => [],
+      default: () => []
     },
     // 是否需要栅格布局
     isCol: {
       type: Boolean,
-      default: true,
+      default: true
     },
     // 表单数据对象
     model: {
       type: Object as PropType<any>,
-      default: () => ({}),
+      default: () => ({})
     },
     // 是否自动设置placeholder
     autoSetPlaceholder: {
       type: Boolean,
-      default: true,
+      default: true
     },
     // 是否自定义内容
     isCustom: {
       type: Boolean,
-      default: false,
+      default: false
     },
     // 表单label宽度
     labelWidth: {
       type: [String, Number],
-      default: "auto",
+      default: 'auto'
     },
     // 表单验证规则
     rules: {
       type: Object as PropType<FormRules>,
-      default: () => ({}),
+      default: () => ({})
     },
     // 表单标签位置
     labelPosition: {
       validator(value: string) {
-        return ["left", "right", "top"].includes(value)
+        return ['left', 'right', 'top'].includes(value)
       },
-      default: "right",
+      default: 'right'
     },
     // 表单标签后缀
     labelSuffix: {
       type: String,
-      default: "",
+      default: ''
     },
     // 是否隐藏必填星号
     hideRequiredAsterisk: {
       type: Boolean,
-      default: false,
+      default: false
     },
     // 必填星号位置
     requireAsteriskPosition: {
       validator(value: string) {
-        return ["left", "right"].includes(value)
+        return ['left', 'right'].includes(value)
       },
-      default: "left",
+      default: 'left'
     },
     // 是否显示验证信息
     showMessage: {
       type: Boolean,
-      default: true,
+      default: true
     },
     // 是否显示内联验证信息
     inlineMessage: {
       type: Boolean,
-      default: false,
+      default: false
     },
     // 是否显示验证状态图标
     statusIcon: {
       type: Boolean,
-      default: false,
+      default: false
     },
     // 规则变化时是否立即验证
     validateOnRuleChange: {
       type: Boolean,
-      default: true,
+      default: true
     },
     // 组件尺寸
     size: {
       type: String as PropType<ComponentSize>,
-      default: undefined,
+      default: undefined
     },
     // 是否禁用
     disabled: {
       type: Boolean,
-      default: false,
+      default: false
     },
     // 是否在验证失败时滚动到错误位置
     scrollToError: {
       type: Boolean,
-      default: false,
+      default: false
     },
     // 滚动到错误位置的偏移量
     scrollToErrorOffset: {
       type: [Boolean, Object],
-      default: undefined,
-    },
+      default: undefined
+    }
   },
-  emits: ["register"],
+  emits: ['register'],
   setup(props, { slots, expose, emit }) {
     // element form 实例
     const elFormRef = ref<ComponentRef<typeof ElForm>>()
@@ -165,7 +171,7 @@ export default defineComponent({
 
     // 组件挂载时触发
     onMounted(() => {
-      emit("register", unref(elFormRef)?.$parent, unref(elFormRef))
+      emit('register', unref(elFormRef)?.$parent, unref(elFormRef))
     })
 
     // 对表单赋值
@@ -238,7 +244,7 @@ export default defineComponent({
       addSchema,
       setSchema,
       getComponentExpose,
-      getFormItemExpose,
+      getFormItemExpose
     })
 
     // 监听表单结构化数组，重新生成formModel
@@ -249,14 +255,18 @@ export default defineComponent({
       },
       {
         immediate: true,
-        deep: true,
+        deep: true
       }
     )
 
     // 渲染包裹标签，是否使用栅格布局
     const renderWrap = () => {
       const { isCol } = unref(getProps)
-      const content = isCol ? <ElRow gutter={20}>{renderFormItemWrap()}</ElRow> : renderFormItemWrap()
+      const content = isCol ? (
+        <ElRow gutter={20}>{renderFormItemWrap()}</ElRow>
+      ) : (
+        renderFormItemWrap()
+      )
       return content
     }
 
@@ -266,13 +276,13 @@ export default defineComponent({
       const { schema = [], isCol } = unref(getProps)
 
       return schema
-        .filter(v => !v.remove && !v.hidden)
-        .map(item => {
+        .filter((v) => !v.remove && !v.hidden)
+        .map((item) => {
           // 如果是 Divider 组件，需要自己占用一行
-          const isDivider = item.component === "Divider"
-          const Com = componentMap["Divider"] as ReturnType<typeof defineComponent>
+          const isDivider = item.component === 'Divider'
+          const Com = componentMap['Divider'] as ReturnType<typeof defineComponent>
           return isDivider ? (
-            <Com {...{ contentPosition: "left", ...item.componentProps }}>{item?.label}</Com>
+            <Com {...{ contentPosition: 'left', ...item.componentProps }}>{item?.label}</Com>
           ) : isCol ? (
             // 如果需要栅格，需要包裹 ElCol
             <ElCol {...setGridProp(item.colProps)}>{renderFormItem(item)}</ElCol>
@@ -289,11 +299,12 @@ export default defineComponent({
         {
           field: item.field,
           path:
-            item.component === ComponentNameEnum.TREE_SELECT || item.component === ComponentNameEnum.TRANSFER
-              ? "componentProps.data"
-              : "componentProps.options",
-          value: options,
-        },
+            item.component === ComponentNameEnum.TREE_SELECT ||
+            item.component === ComponentNameEnum.TRANSFER
+              ? 'componentProps.data'
+              : 'componentProps.options',
+          value: options
+        }
       ])
     }
 
@@ -315,14 +326,16 @@ export default defineComponent({
 
             const componentSlots = (item?.componentProps as any)?.slots || {}
             const slotsMap: Recordable = {
-              ...setItemComponentSlots(componentSlots),
+              ...setItemComponentSlots(componentSlots)
             }
             // // 如果是select组件，并且没有自定义模板，自动渲染options
             if (item.component === ComponentNameEnum.SELECT) {
               slotsMap.default = !componentSlots.default
                 ? () => renderSelectOptions(item)
                 : () => {
-                    return componentSlots.default(unref((item?.componentProps as SelectComponentProps)?.options))
+                    return componentSlots.default(
+                      unref((item?.componentProps as SelectComponentProps)?.options)
+                    )
                   }
             }
 
@@ -334,11 +347,16 @@ export default defineComponent({
             }
 
             // 单选框组和按钮样式
-            if (item.component === ComponentNameEnum.RADIO_GROUP || item.component === ComponentNameEnum.RADIO_BUTTON) {
+            if (
+              item.component === ComponentNameEnum.RADIO_GROUP ||
+              item.component === ComponentNameEnum.RADIO_BUTTON
+            ) {
               slotsMap.default = !componentSlots.default
                 ? () => renderRadioOptions(item)
                 : () => {
-                    return componentSlots.default(unref((item?.componentProps as CheckboxGroupComponentProps)?.options))
+                    return componentSlots.default(
+                      unref((item?.componentProps as CheckboxGroupComponentProps)?.options)
+                    )
                   }
             }
 
@@ -350,7 +368,9 @@ export default defineComponent({
               slotsMap.default = !componentSlots.default
                 ? () => renderCheckboxOptions(item)
                 : () => {
-                    return componentSlots.default(unref((item?.componentProps as RadioGroupComponentProps)?.options))
+                    return componentSlots.default(
+                      unref((item?.componentProps as RadioGroupComponentProps)?.options)
+                    )
                   }
             }
 
@@ -360,9 +380,9 @@ export default defineComponent({
                 get: () => {
                   return get(formModel.value, item.field)
                 },
-                set: val => {
+                set: (val) => {
                   set(formModel.value, item.field, val)
-                },
+                }
               })
 
               return item.component === ComponentNameEnum.UPLOAD ? (
@@ -373,7 +393,7 @@ export default defineComponent({
                   {...setComponentProps(item)}
                   style={
                     item.componentProps?.style || {
-                      width: "100%",
+                      width: '100%'
                     }
                   }
                 >
@@ -387,7 +407,7 @@ export default defineComponent({
                   {...setComponentProps(item)}
                   style={
                     item.componentProps?.style || {
-                      width: "100%",
+                      width: '100%'
                     }
                   }
                 >
@@ -398,7 +418,7 @@ export default defineComponent({
 
             return <>{Comp()}</>
           }
-        },
+        }
       }
       if (item?.formItemProps?.slots?.label) {
         formItemSlots.label = (...args: any[]) => {
@@ -416,7 +436,7 @@ export default defineComponent({
           ref={(el: any) => setFormItemRefMap(el, item.field)}
           {...(item.formItemProps || {})}
           prop={item.field}
-          label={item.label || ""}
+          label={item.label || ''}
         >
           {formItemSlots}
         </ElFormItem>
@@ -426,7 +446,7 @@ export default defineComponent({
     // 过滤传入Form组件的属性
     const getFormBindValue = () => {
       // 避免在标签上出现多余的属性
-      const delKeys = ["schema", "isCol", "autoSetPlaceholder", "isCustom", "model"]
+      const delKeys = ['schema', 'isCol', 'autoSetPlaceholder', 'isCustom', 'model']
       const props = { ...unref(getProps) }
       for (const key in props) {
         if (delKeys.indexOf(key) !== -1) {
@@ -436,7 +456,6 @@ export default defineComponent({
       return props as FormProps
     }
 
-    
     return () => (
       <ElForm
         ref={elFormRef}
@@ -452,12 +471,12 @@ export default defineComponent({
           // 如果需要自定义，就什么都不渲染，而是提供默认插槽
           default: () => {
             const { isCustom } = unref(getProps)
-            return isCustom ? getSlot(slots, "default") : renderWrap()
-          },
+            return isCustom ? getSlot(slots, 'default') : renderWrap()
+          }
         }}
       </ElForm>
     )
-  },
+  }
 })
 </script>
 

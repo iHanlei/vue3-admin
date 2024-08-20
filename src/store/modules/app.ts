@@ -9,6 +9,12 @@ import { ComponentSize, ElMessage } from "element-plus"
 
 interface ThemeTypes {
   elColorPrimary?: string
+  elColorPrimaryLight3?: string
+  elColorPrimaryLight5?: string
+  elColorPrimaryLight7?: string
+  elColorPrimaryLight8?: string
+  elColorPrimaryLight9?: string
+  elColorPrimaryDark2?: string
   leftMenuBorderColor?: string
   leftMenuBgColor?: string
   leftMenuBgLightColor?: string
@@ -74,23 +80,29 @@ export const useAppStore = defineStore("app", {
       isDark: false, // 是否是暗黑模式
       theme: {
         // 主题色
-        elColorPrimary: "#409eff",
+        elColorPrimary: '#eeb41d',
+        elColorPrimaryLight3: 'rgba(238,180,29,0.7)',
+        elColorPrimaryLight5: 'rgba(238,180,29,0.5)',
+        elColorPrimaryLight7: 'rgba(238,180,29,0.3)',
+        elColorPrimaryLight8: 'rgba(238,180,29,0.2)',
+        elColorPrimaryLight9: 'rgba(238,180,29,0.1)',
+        elColorPrimaryDark2: '#e2ae24',
         // 左侧菜单边框颜色
         leftMenuBorderColor: "inherit",
         // 左侧菜单背景颜色
-        leftMenuBgColor: "#001529",
+        leftMenuBgColor: "#fff",
         // 左侧菜单浅色背景颜色
-        leftMenuBgLightColor: "#0f2438",
+        leftMenuBgLightColor: "#fff",
         // 左侧菜单选中背景颜色
-        leftMenuBgActiveColor: "var(--el-color-primary)",
+        leftMenuBgActiveColor: "rgba(238,180,29,0.1)",
         // 左侧菜单收起选中背景颜色
-        leftMenuCollapseBgActiveColor: "var(--el-color-primary)",
+        leftMenuCollapseBgActiveColor: "rgba(238, 180, 29, 0.1)",
         // 左侧菜单字体颜色
-        leftMenuTextColor: "#bfcbd9",
+        leftMenuTextColor: "#303133",
         // 左侧菜单选中字体颜色
-        leftMenuTextActiveColor: "#fff",
+        leftMenuTextActiveColor: "var(--el-color-primary)",
         // logo字体颜色
-        logoTitleTextColor: "#fff",
+        logoTitleTextColor: "#303133",
         // logo边框颜色
         logoBorderColor: "inherit",
         // 头部背景颜色
@@ -310,7 +322,6 @@ export const useAppStore = defineStore("app", {
       isDark.value = this.getIsDark
     },
   },
-  persist: true,
 })
 
 export const useAppStoreWithOut = () => {

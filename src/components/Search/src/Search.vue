@@ -1,95 +1,95 @@
 <script setup lang="tsx">
-import { Form, FormSchema, FormSetProps } from "@/components/Form"
-import { PropType, computed, unref, ref, watch, onMounted } from "vue"
-import { useForm } from "@/hooks/useForm"
-import { findIndex } from "@/utils"
-import { cloneDeep, set } from "lodash-es"
-import { initModel } from "@/components/Form/src/helper"
-import ActionButton from "./components/ActionButton.vue"
-import { SearchProps } from "./types"
-import { FormItemProp } from "element-plus"
-import { isObject, isEmptyVal } from "@/utils/is"
+import { Form, FormSchema, FormSetProps } from '@/components/Form'
+import { PropType, computed, unref, ref, watch, onMounted } from 'vue'
+import { useForm } from '@/hooks/useForm'
+import { findIndex } from '@/utils'
+import { cloneDeep, set } from 'lodash-es'
+import { initModel } from '@/components/Form/src/helper'
+import ActionButton from './components/ActionButton.vue'
+import { SearchProps } from './types'
+import { FormItemProp } from 'element-plus'
+import { isObject, isEmptyVal } from '@/utils/is'
 
 // 定义props属性
 const props = defineProps({
   // 表单布局结构数组
   schema: {
     type: Array as PropType<FormSchema[]>,
-    default: () => [],
+    default: () => []
   },
   // 是否需要栅格布局
   isCol: {
     type: Boolean,
-    default: false,
+    default: false
   },
   // 表单标签宽度
   labelWidth: {
     type: [String, Number],
-    default: "auto",
+    default: 'auto'
   },
   // 操作按钮风格位置
   layout: {
     validator(value: string) {
-      return ["inline", "bottom"].includes(value)
+      return ['inline', 'bottom'].includes(value)
     },
-    default: "inline",
+    default: 'inline'
   },
   // 底部按钮对齐方式
   buttonPosition: {
     validator(value: string) {
-      return ["left", "center", "right"].includes(value)
+      return ['left', 'center', 'right'].includes(value)
     },
-    default: "center",
+    default: 'center'
   },
   // 是否显示搜索按钮
   showSearch: {
     type: Boolean,
-    default: true,
+    default: true
   },
   // 是否显示重置按钮
   showReset: {
     type: Boolean,
-    default: true,
+    default: true
   },
   // 是否显示伸缩按钮
   showExpand: {
     type: Boolean,
-    default: false,
+    default: false
   },
   // 伸缩的界限字段
   expandField: {
     type: String,
-    default: "",
+    default: ''
   },
   // 表单是否内联
   inline: {
     type: Boolean,
-    default: true,
+    default: true
   },
   // 是否去除空值项
   removeNoValueItem: {
     type: Boolean,
-    default: true,
+    default: true
   },
   // 表单数据对象
   model: {
     type: Object as PropType<Recordable>,
-    default: () => ({}),
+    default: () => ({})
   },
   // 搜索按钮加载状态
   searchLoading: {
     type: Boolean,
-    default: false,
+    default: false
   },
   // 重置按钮加载状态
   resetLoading: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 })
 
 // 定义emit事件
-const emit = defineEmits(["search", "reset", "register", "validate"])
+const emit = defineEmits(['search', 'reset', 'register', 'validate'])
 
 // 表单显示状态
 const visible = ref(true)
@@ -112,12 +112,12 @@ const newSchema = computed(() => {
       return v
     })
   }
-  if (propsComputed.layout === "inline") {
+  if (propsComputed.layout === 'inline') {
     schema = schema.concat([
       {
-        field: "action",
+        field: 'action',
         formItemProps: {
-          labelWidth: "0px",
+          labelWidth: '0px',
           slots: {
             default: () => {
               return (
@@ -138,10 +138,10 @@ const newSchema = computed(() => {
             },
             label: () => {
               return <span>&nbsp;</span>
-            },
-          },
-        },
-      },
+            }
+          }
+        }
+      }
     ])
   }
   return schema
@@ -183,7 +183,7 @@ watch(
   },
   {
     immediate: true,
-    deep: true,
+    deep: true
   }
 )
 
@@ -212,10 +212,10 @@ const filterModel = async () => {
 // 搜索函数
 const search = async () => {
   const elFormExpose = await getElFormExpose()
-  await elFormExpose?.validate(async isValid => {
+  await elFormExpose?.validate(async (isValid) => {
     if (isValid) {
       const model = await filterModel()
-      emit("search", model)
+      emit('search', model)
     }
   })
 }
@@ -225,13 +225,13 @@ const reset = async () => {
   const elFormExpose = await getElFormExpose()
   elFormExpose?.resetFields()
   const model = await filterModel()
-  emit("reset", model)
+  emit('reset', model)
 }
 
 // 底部按钮样式
 const bottomButtonStyle = computed(() => {
   return {
-    textAlign: unref(getProps).buttonPosition as unknown as "left" | "center" | "right",
+    textAlign: unref(getProps).buttonPosition as unknown as 'left' | 'center' | 'right'
   }
 })
 
@@ -287,19 +287,19 @@ const defaultExpose = {
   setValues,
   delSchema,
   addSchema,
-  getFormData,
+  getFormData
 }
 
 // 组件挂载时触发
 onMounted(() => {
-  emit("register", defaultExpose)
+  emit('register', defaultExpose)
 })
 
 defineExpose(defaultExpose)
 
 // 表单验证事件
 const onFormValidate = (prop: FormItemProp, isValid: boolean, message: string) => {
-  emit("validate", prop, isValid, message)
+  emit('validate', prop, isValid, message)
 }
 </script>
 

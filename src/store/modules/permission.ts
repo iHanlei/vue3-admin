@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { asyncRouterMap, constantRouterMap } from "@/router"
+import { constantRouterMap } from "@/router"
 import { generateRoutesByServer, flatMultiLevelRoutes } from "@/router/helper"
 import { store } from "../index"
 import { cloneDeep } from "lodash-es"
@@ -42,22 +42,12 @@ export const usePermissionStore = defineStore("permission", {
           routerMap = generateRoutesByServer(routers as AppCustomRouteRecordRaw[])
         } else {
           // 直接读取静态路由表
-          routerMap = cloneDeep(asyncRouterMap)
+          routerMap = cloneDeep(constantRouterMap)
         }
         // 动态路由，404一定要放到最后面
-        this.addRouters = routerMap.concat([
-          {
-            path: "/:path(.*)*",
-            redirect: "/404",
-            name: "404Page",
-            meta: {
-              hidden: true,
-              breadcrumb: false,
-            },
-          },
-        ])
+        this.addRouters = cloneDeep(routerMap)
         // 渲染菜单的所有路由
-        this.routers = cloneDeep(constantRouterMap).concat(routerMap)
+        this.routers = cloneDeep(routerMap)
         resolve()
       })
     },

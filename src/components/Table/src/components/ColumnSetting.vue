@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { TableColumn } from "../types"
-import { PropType, ref, watch, unref } from "vue"
-import { cloneDeep } from "lodash-es"
-import { VueDraggable } from "vue-draggable-plus"
+import { TableColumn } from '../types'
+import { PropType, ref, watch, unref } from 'vue'
+import { cloneDeep } from 'lodash-es'
+import { VueDraggable } from 'vue-draggable-plus'
 
 const modelValue = defineModel<boolean>()
 
 const props = defineProps({
   columns: {
     type: Array as PropType<TableColumn[]>,
-    default: () => [],
-  },
+    default: () => []
+  }
 })
 
-const emit = defineEmits(["confirm"])
+const emit = defineEmits(['confirm'])
 
 //表格默认过滤列设置字段
-const DEFAULT_FILTER_COLUMN = ["expand", "selection"]
+const DEFAULT_FILTER_COLUMN = ['expand', 'selection']
 
 const oldColumns = ref<TableColumn[]>()
 
@@ -30,25 +30,25 @@ const checkColumns = ref<string[]>([])
 
 const checkAll = ref(false)
 const isIndeterminate = ref(true)
-const handleCheckAllChange = (val: boolean) => {
+const handleCheckAllChange = (val: any) => {
   checkColumns.value = val ? unref(defaultCheckColumns) : []
   isIndeterminate.value = false
 }
 
-const handleCheckedColumnsChange = (value: string[]) => {
+const handleCheckedColumnsChange = (value: any[]) => {
   const checkedCount = value.length
   checkAll.value = checkedCount === unref(defaultCheckColumns)?.length
   isIndeterminate.value = checkedCount > 0 && checkedCount < unref(defaultCheckColumns)?.length
 }
 
 const confirm = () => {
-  const newColumns = cloneDeep(unref(settingColumns))?.map(item => {
-    const fixed = unref(settingColumns)?.find(col => col.field === item.field)?.fixed
+  const newColumns = cloneDeep(unref(settingColumns))?.map((item) => {
+    const fixed = unref(settingColumns)?.find((col) => col.field === item.field)?.fixed
     item.hidden = !!!unref(checkColumns)?.includes(item.field)
     item.fixed = fixed ? fixed : undefined
     return item
   })
-  emit("confirm", [...unref(hiddenColumns), ...(newColumns || [])])
+  emit('confirm', [...unref(hiddenColumns), ...(newColumns || [])])
   modelValue.value = false
 }
 
@@ -57,7 +57,7 @@ const restore = () => {
 }
 
 const initColumns = (columns: TableColumn[], isReStore = false) => {
-  const newColumns = columns?.filter(item => {
+  const newColumns = columns?.filter((item) => {
     if (!isReStore) {
       item.fixed = item.fixed !== void 0 ? item.fixed : undefined
     }
@@ -68,13 +68,15 @@ const initColumns = (columns: TableColumn[], isReStore = false) => {
   }
   settingColumns.value = cloneDeep(newColumns)
 
-  hiddenColumns.value = cloneDeep(columns?.filter(item => item.type && DEFAULT_FILTER_COLUMN.includes(item.type)))
+  hiddenColumns.value = cloneDeep(
+    columns?.filter((item) => item.type && DEFAULT_FILTER_COLUMN.includes(item.type))
+  )
 
-  defaultCheckColumns.value = unref(settingColumns)?.map(item => item.field) || []
+  defaultCheckColumns.value = unref(settingColumns)?.map((item) => item.field) || []
   checkColumns.value =
     unref(settingColumns)
-      ?.filter(item => !item.hidden)
-      ?.map(item => item.field) || []
+      ?.filter((item) => !item.hidden)
+      ?.map((item) => item.field) || []
 
   if (unref(checkColumns)?.length === unref(defaultCheckColumns)?.length) {
     checkAll.value = true
@@ -84,12 +86,12 @@ const initColumns = (columns: TableColumn[], isReStore = false) => {
 
 watch(
   () => props.columns,
-  columns => {
+  (columns) => {
     initColumns(columns)
   },
   {
     immediate: true,
-    deep: true,
+    deep: true
   }
 )
 </script>
@@ -99,15 +101,32 @@ watch(
     <div>
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-between">
-          <ElCheckbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange" />
+          <ElCheckbox
+            v-model="checkAll"
+            :indeterminate="isIndeterminate"
+            @change="handleCheckAllChange"
+          />
           <ElText class="ml-8px!">{{ checkColumns.length }} / {{ settingColumns?.length }}</ElText>
         </div>
         <ElText>排序</ElText>
       </div>
       <div v-if="settingColumns?.length">
-        <VueDraggable v-model="settingColumns" target=".el-checkbox-group" handle=".handle" :animation="150">
-          <ElCheckboxGroup ref="draggableWrap" v-model="checkColumns" @change="handleCheckedColumnsChange">
-            <div v-for="item in settingColumns" :key="item.field" class="flex items-center justify-between mt-12px">
+        <VueDraggable
+          v-model="settingColumns"
+          target=".el-checkbox-group"
+          handle=".handle"
+          :animation="150"
+        >
+          <ElCheckboxGroup
+            ref="draggableWrap"
+            v-model="checkColumns"
+            @change="handleCheckedColumnsChange"
+          >
+            <div
+              v-for="item in settingColumns"
+              :key="item.field"
+              class="flex items-center justify-between mt-12px"
+            >
               <ElCheckbox :label="item.field">
                 {{ item.label }}
               </ElCheckbox>

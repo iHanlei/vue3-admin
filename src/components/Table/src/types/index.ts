@@ -83,7 +83,7 @@ export interface TableProps extends Omit<Partial<ElTableProps<any[]>>, 'data'> {
   columns?: TableColumn[]
   // 是否展示分页
   pagination?: Pagination | undefined
-  // 仅对 type=selection 的列有效，类型为 Boolean，为 true 则会在数据更新之后保留之前选中的数据（需指定 row-key）
+  // 仅对 type=selection 的列有效，类型为 Boolean，为 true 则会在数据更新之后保留之前选中的数据(需指定 row-key)
   reserveSelection?: boolean
   // 加载状态
   loading?: boolean

@@ -12,11 +12,15 @@ declare module 'vue' {
     Dialog: typeof import('./src/components/Dialog.vue')['default']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
+    ElCheckboxGroup: typeof import('element-plus/es')['ElCheckboxGroup']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
+    ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElText: typeof import('element-plus/es')['ElText']
     Form: typeof import('./src/components/Form/src/Form.vue')['default']
     Icon: typeof import('./src/components/Icon.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -24,5 +28,8 @@ declare module 'vue' {
     Search: typeof import('./src/components/Search/src/Search.vue')['default']
     Table: typeof import('./src/components/Table/src/Table.vue')['default']
     TableActions: typeof import('./src/components/Table/src/components/TableActions.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }
