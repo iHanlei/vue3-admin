@@ -1,18 +1,18 @@
-import { createRouter, createWebHashHistory } from "vue-router"
-import type { Router, RouteLocationNormalized, RouteRecordNormalized } from "vue-router"
-import { isUrl } from "@/utils/is"
-import { omit, cloneDeep } from "lodash-es"
+import { createRouter, createWebHashHistory } from 'vue-router'
+import type { Router, RouteLocationNormalized, RouteRecordNormalized } from 'vue-router'
+import { isUrl } from '@/utils/is'
+import { omit, cloneDeep } from 'lodash-es'
 import { asyncRouterMap } from '@/router'
-import { AppRouteRecordRaw, AppCustomRouteRecordRaw } from "./types"
+import { AppRouteRecordRaw, AppCustomRouteRecordRaw } from './types'
 
 /* Layout */
-export const Layout = () => import("@/layout/Layout.vue")
+export const Layout = () => import('@/layout/Layout.vue')
 
 export const getParentLayout = () => {
   return () =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       resolve({
-        name: "ParentLayout",
+        name: 'ParentLayout'
       })
     })
 }
@@ -23,12 +23,12 @@ export const getRawRoute = (route: RouteLocationNormalized): RouteLocationNormal
   return {
     ...opt,
     matched: (matched
-      ? matched.map(item => ({
+      ? matched.map((item) => ({
           meta: item.meta,
           name: item.name,
-          path: item.path,
+          path: item.path
         }))
-      : undefined) as RouteRecordNormalized[],
+      : undefined) as RouteRecordNormalized[]
   }
 }
 
@@ -37,7 +37,7 @@ export const generateRoutesByServer = (routes: AppCustomRouteRecordRaw[]): AppRo
   const res: AppRouteRecordRaw[] = []
 
   for (const route of routes) {
-    const data: any = asyncRouterMap.find(item => item.name === route.permVal)
+    const data: any = asyncRouterMap.find((item) => item.name === route.permVal)
     if (data) {
       if (route.child && route.child.length > 0) {
         data.children = generateRoutesByServer(route.child)
@@ -51,8 +51,8 @@ export const generateRoutesByServer = (routes: AppCustomRouteRecordRaw[]): AppRo
 
 export const pathResolve = (parentPath: string, path: string) => {
   if (isUrl(path)) return path
-  const childPath = path.startsWith("/") || !path ? path : `/${path}`
-  return `${parentPath}${childPath}`.replace(/\/\//g, "/")
+  const childPath = path.startsWith('/') || !path ? path : `/${path}`
+  return `${parentPath}${childPath}`.replace(/\/\//g, '/')
 }
 
 // 路由降级
@@ -70,7 +70,7 @@ export const flatMultiLevelRoutes = (routes: AppRouteRecordRaw[]) => {
 
 // 层级是否大于2
 const isMultipleRoute = (route: AppRouteRecordRaw) => {
-  if (!route || !Reflect.has(route, "children") || !route.children?.length) {
+  if (!route || !Reflect.has(route, 'children') || !route.children?.length) {
     return false
   }
 
@@ -91,14 +91,14 @@ const isMultipleRoute = (route: AppRouteRecordRaw) => {
 const promoteRouteLevel = (route: AppRouteRecordRaw) => {
   let router: Router | null = createRouter({
     routes: [route as unknown as RouteRecordNormalized],
-    history: createWebHashHistory(),
+    history: createWebHashHistory()
   })
 
   const routes = router.getRoutes()
   addToChildren(routes, route.children || [], route)
   router = null
 
-  route.children = route.children?.map(item => omit(item, "children"))
+  route.children = route.children?.map((item) => omit(item, 'children'))
 }
 
 // 添加所有子菜单
@@ -109,12 +109,12 @@ const addToChildren = (
 ) => {
   for (let index = 0; index < children.length; index++) {
     const child = children[index]
-    const route = routes.find(item => item.name === child.name)
+    const route = routes.find((item) => item.name === child.name)
     if (!route) {
       continue
     }
     routeModule.children = routeModule.children || []
-    if (!routeModule.children.find(item => item.name === route.name)) {
+    if (!routeModule.children.find((item) => item.name === route.name)) {
       routeModule.children?.push(route as unknown as AppRouteRecordRaw)
     }
     if (child.children?.length) {

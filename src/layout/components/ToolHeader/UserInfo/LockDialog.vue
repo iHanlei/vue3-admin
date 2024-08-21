@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n"
-import { ref } from "vue"
-import { useValidator } from "@/hooks/useValidator"
-import { reactive, computed } from "vue"
-import { useDesign } from "@/hooks/useDesign"
-import { useLockStore } from "@/store/modules/lock"
-import Dialog from "@/components/Dialog.vue"
+import { useI18n } from 'vue-i18n'
+import { ref } from 'vue'
+import { useValidator } from '@/hooks/useValidator'
+import { reactive, computed } from 'vue'
+import { useDesign } from '@/hooks/useDesign'
+import { useLockStore } from '@/store/modules/lock'
+import Dialog from '@/components/Dialog.vue'
 
 const { getPrefixCls } = useDesign()
-const prefixCls = getPrefixCls("lock-dialog")
+const prefixCls = getPrefixCls('lock-dialog')
 
 const { requiredValidator } = useValidator()
 
@@ -18,29 +18,29 @@ const lockStore = useLockStore()
 
 const props = defineProps({
   modelValue: {
-    type: Boolean,
-  },
+    type: Boolean
+  }
 })
 
-const emit = defineEmits(["update:modelValue"])
+const emit = defineEmits(['update:modelValue'])
 
 const dialogVisible = computed({
   get: () => props.modelValue,
-  set: val => {
-    emit("update:modelValue", val)
-  },
+  set: (val) => {
+    emit('update:modelValue', val)
+  }
 })
 
-const dialogTitle = ref(t("lock.lockScreen"))
+const dialogTitle = ref(t('lock.lockScreen'))
 
 const formRef = ref()
 
 const formData = reactive({
-  lockPassword: "",
+  lockPassword: ''
 })
 
 const formRules = reactive({
-  lockPassword: [{ required: true, validator: requiredValidator }],
+  lockPassword: [{ required: true, validator: requiredValidator }]
 })
 
 const handleLock = async () => {
@@ -49,7 +49,7 @@ const handleLock = async () => {
       dialogVisible.value = false
       lockStore.setLockInfo({
         isLock: true,
-        ...formData,
+        ...formData
       })
     }
   })
@@ -57,7 +57,13 @@ const handleLock = async () => {
 </script>
 
 <template>
-  <Dialog v-model="dialogVisible" width="500px" max-height="170px" :class="prefixCls" :title="dialogTitle">
+  <Dialog
+    v-model="dialogVisible"
+    width="500px"
+    max-height="170px"
+    :class="prefixCls"
+    :title="dialogTitle"
+  >
     <div class="flex flex-col items-center">
       <img src="@/assets/svgs/avatar.svg" alt="" class="w-70px h-70px rounded-[50%]" />
       <span class="text-14px my-10px text-[var(--top-header-text-color)]">Evan</span>
@@ -72,7 +78,7 @@ const handleLock = async () => {
       </ElFormItem>
     </ElForm>
     <template #footer>
-      <ElButton type="primary" @click="handleLock">{{ t("lock.lock") }}</ElButton>
+      <ElButton type="primary" @click="handleLock">{{ t('lock.lock') }}</ElButton>
     </template>
   </Dialog>
 </template>

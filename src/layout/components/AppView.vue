@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useTagsViewStore } from "@/store/modules/tagsView"
-import { useAppStore } from "@/store/modules/app"
-import { computed } from "vue"
-import Footer from "./AppView/Footer.vue"
+import { useTagsViewStore } from '@/store/modules/tagsView'
+import { useAppStore } from '@/store/modules/app'
+import { computed } from 'vue'
+import Footer from './AppView/Footer.vue'
 
 const appStore = useAppStore()
 
@@ -18,15 +18,15 @@ const getCaches = computed((): string[] => {
 <template>
   <section
     :class="[
-      'flex-1 p-[var(--app-content-padding)] w-[calc(100%-var(--app-content-padding)-var(--app-content-padding))] bg-[var(--app-content-bg-color)] dark:bg-[var(--el-bg-color)]',
+      'flex-1 p-[var(--app-content-padding)] w-[calc(100%-var(--app-content-padding)-var(--app-content-padding))] bg-[var(--app-content-bg-color)] dark:bg-[var(--el-bg-color)]'
     ]"
   >
     <router-view>
       <template #default="{ Component, route }">
         <keep-alive :include="getCaches">
-          <ElCard shadow="none" class="h-full">
-          <component :is="Component" :key="route.fullPath" />
-        </ElCard>
+          <ElCard shadow="never" class="h-full">
+            <component :is="Component" :key="route.fullPath" />
+          </ElCard>
         </keep-alive>
       </template>
     </router-view>

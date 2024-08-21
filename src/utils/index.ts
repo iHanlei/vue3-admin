@@ -3,7 +3,7 @@
  * @returns 字符串下划线
  */
 export const humpToUnderline = (str: string): string => {
-  return str.replace(/([A-Z])/g, "-$1").toLowerCase()
+  return str.replace(/([A-Z])/g, '-$1').toLowerCase()
 }
 
 // 设置全局css变量
@@ -36,7 +36,7 @@ export const findIndex = <T = Recordable>(ary: Array<T>, fn: Fn): number => {
  */
 export function objToFormData(obj: Recordable) {
   const formData = new FormData()
-  Object.keys(obj).forEach(key => {
+  Object.keys(obj).forEach((key) => {
     formData.append(key, obj[key])
   })
   return formData
@@ -46,7 +46,7 @@ export function objToFormData(obj: Recordable) {
  * 首字母大写
  */
 export function firstUpperCase(str: string) {
-  return str.toLowerCase().replace(/( |^)[a-z]/g, L => L.toUpperCase())
+  return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
 }
 
 /**

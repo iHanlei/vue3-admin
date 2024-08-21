@@ -1,5 +1,5 @@
-import type { RouteRecordRaw } from "vue-router"
-import { defineComponent } from "vue"
+import type { RouteRecordRaw } from 'vue-router'
+import { defineComponent } from 'vue'
 
 interface RouteMetaType extends Record<string | number | symbol, unknown> {
   hidden?: boolean // 当设置 true 的时候该路由不会再侧边栏出现 如404，login等页面(默认 false)
@@ -14,16 +14,16 @@ interface RouteMetaType extends Record<string | number | symbol, unknown> {
   canTo?: boolean // 设置为true即使hidden为true，也依然可以进行路由跳转(默认 false)
 }
 
-declare module "vue-router" {
+declare module 'vue-router' {
   interface RouteMeta extends RouteMetaType {}
 }
 
 type Component<T = any> =
   | ReturnType<typeof defineComponent>
-  | (() => Promise<typeof import("*.vue")>)
+  | (() => Promise<typeof import('*.vue')>)
   | (() => Promise<T>)
 
-export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, "meta" | "children"> {
+export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta' | 'children'> {
   name: string // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
   meta: RouteMetaType
   component?: Component | string
@@ -32,7 +32,8 @@ export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, "meta" | "childr
   fullPath?: string
 }
 
-export interface AppCustomRouteRecordRaw extends Omit<RouteRecordRaw, "meta" | "component" | "children"> {
+export interface AppCustomRouteRecordRaw
+  extends Omit<RouteRecordRaw, 'meta' | 'component' | 'children'> {
   permId: string
   permVal: string
   parentId: string

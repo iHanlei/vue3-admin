@@ -1,20 +1,20 @@
 <script lang="tsx">
-import { ElBreadcrumb, ElBreadcrumbItem } from "element-plus"
-import { ref, watch, computed, unref, defineComponent, TransitionGroup } from "vue"
-import { useRouter } from "vue-router"
-import { usePermissionStore } from "@/store/modules/permission"
-import { filter, treeToList } from "@/utils/tree"
-import type { RouteLocationNormalizedLoaded } from "vue-router"
-import i18n from '@/locales'
-import { useAppStore } from "@/store/modules/app"
-import { useDesign } from "@/hooks/useDesign"
-import { AppRouteRecordRaw } from "@/router/types"
-import { pathResolve } from "@/router/helper"
-import Icon from "@/components/Icon.vue"
+import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ref, watch, computed, unref, defineComponent, TransitionGroup } from 'vue'
+import { useRouter } from 'vue-router'
+import { usePermissionStore } from '@/store/modules/permission'
+import { filter, treeToList } from '@/utils/tree'
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { useAppStore } from '@/store/modules/app'
+import { useDesign } from '@/hooks/useDesign'
+import { AppRouteRecordRaw } from '@/router/types'
+import { pathResolve } from '@/router/helper'
+import Icon from '@/components/Icon.vue'
 
 const { getPrefixCls } = useDesign()
 
-const prefixCls = getPrefixCls("breadcrumb")
+const prefixCls = getPrefixCls('breadcrumb')
 
 const appStore = useAppStore()
 
@@ -22,17 +22,20 @@ const appStore = useAppStore()
 const breadcrumbIcon = computed(() => appStore.getBreadcrumbIcon)
 
 export default defineComponent({
-  name: "Breadcrumb",
+  name: 'Breadcrumb',
   setup() {
     const { currentRoute } = useRouter()
 
-    const { t } = i18n.global
+    const { t } = useI18n()
 
     const levelList = ref<AppRouteRecordRaw[]>([])
 
     const permissionStore = usePermissionStore()
 
-    const filterBreadcrumb = (routes: AppRouteRecordRaw[], parentPath = ""): AppRouteRecordRaw[] => {
+    const filterBreadcrumb = (
+      routes: AppRouteRecordRaw[],
+      parentPath = ''
+    ): AppRouteRecordRaw[] => {
       const res: AppRouteRecordRaw[] = []
 
       for (const route of routes) {
@@ -72,17 +75,17 @@ export default defineComponent({
 
     const renderBreadcrumb = () => {
       const breadcrumbList = treeToList<AppRouteRecordRaw[]>(unref(levelList))
-      return breadcrumbList.map(v => {
-        const disabled = !v.redirect || v.redirect === "noredirect"
+      return breadcrumbList.map((v) => {
+        const disabled = !v.redirect || v.redirect === 'noredirect'
         const meta = v.meta
         return (
-          <ElBreadcrumbItem to={{ path: disabled ? "" : v.path }} key={v.name}>
+          <ElBreadcrumbItem to={{ path: disabled ? '' : v.path }} key={v.name}>
             {meta?.icon && breadcrumbIcon.value ? (
               <>
-                <Icon icon={meta.icon} class="mr-[5px]"></Icon> {t(v?.meta?.title || "")}
+                <Icon icon={meta.icon} class="mr-[5px]"></Icon> {t(v?.meta?.title || '')}
               </>
             ) : (
-              t(v?.meta?.title || "")
+              t(v?.meta?.title || '')
             )}
           </ElBreadcrumbItem>
         )
@@ -92,13 +95,13 @@ export default defineComponent({
     watch(
       () => currentRoute.value,
       (route: RouteLocationNormalizedLoaded) => {
-        if (route.path.startsWith("/redirect/")) {
+        if (route.path.startsWith('/redirect/')) {
           return
         }
         getBreadcrumb()
       },
       {
-        immediate: true,
+        immediate: true
       }
     )
 
@@ -109,12 +112,12 @@ export default defineComponent({
         </TransitionGroup>
       </ElBreadcrumb>
     )
-  },
+  }
 })
 </script>
 
 <style lang="less" scoped>
-@prefix-cls: ~"@{elNamespace}-breadcrumb";
+@prefix-cls: ~'@{elNamespace}-breadcrumb';
 
 .@{prefix-cls} {
   :deep(&__item) {

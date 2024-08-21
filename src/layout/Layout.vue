@@ -1,13 +1,13 @@
 <script lang="tsx">
-import { computed, defineComponent, unref } from "vue"
-import { useAppStore } from "@/store/modules/app"
-import { useRenderLayout } from "./useRenderLayout"
-import { useDesign } from "@/hooks/useDesign"
-import { ElBacktop } from "element-plus"
+import { computed, defineComponent, unref } from 'vue'
+import { useAppStore } from '@/store/modules/app'
+import { useRenderLayout } from './useRenderLayout'
+import { useDesign } from '@/hooks/useDesign'
+import { ElBacktop } from 'element-plus'
 
 const { getPrefixCls } = useDesign()
 
-const prefixCls = getPrefixCls("layout")
+const prefixCls = getPrefixCls('layout')
 
 const appStore = useAppStore()
 
@@ -26,7 +26,7 @@ const handleClickOutside = () => {
 const renderLayout = () => {
   // 暂时先只写一种布局模式, 后面空了有需求再补充其它布局
   switch (unref(layout)) {
-    case "classic":
+    case 'classic':
       const { renderClassic } = useRenderLayout()
       return renderClassic()
     default:
@@ -35,10 +35,10 @@ const renderLayout = () => {
 }
 
 export default defineComponent({
-  name: "Layout",
+  name: 'Layout',
   setup() {
     return () => (
-      <section class={[prefixCls, `${prefixCls}__${layout.value}`, "w-[100%] h-[100%] relative"]}>
+      <section class={[prefixCls, `${prefixCls}__${layout.value}`, 'w-[100%] h-[100%] relative']}>
         {mobile.value && !collapse.value ? (
           <div
             class="absolute top-0 left-0 w-full h-full opacity-30 z-99 bg-[var(--el-color-black)]"
@@ -48,15 +48,18 @@ export default defineComponent({
 
         {renderLayout()}
 
-        <ElBacktop class={prefixCls} target={`.${prefixCls}-content-scrollbar .el-scrollbar__wrap`} />
+        <ElBacktop
+          class={prefixCls}
+          target={`.${prefixCls}-content-scrollbar .el-scrollbar__wrap`}
+        />
       </section>
     )
-  },
+  }
 })
 </script>
 
 <style lang="less" scoped>
-@prefix-cls: ~"@{adminNamespace}-layout";
+@prefix-cls: ~'@{adminNamespace}-layout';
 
 .@{prefix-cls} {
   background-color: var(--app-content-bg-color);
@@ -71,7 +74,7 @@ export default defineComponent({
   }
 
   .layout-border__right::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     right: 0;

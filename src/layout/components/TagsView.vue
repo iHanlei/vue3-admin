@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { onMounted, watch, computed, unref, ref, nextTick } from "vue"
-import { useRouter } from "vue-router"
-import type { RouteLocationNormalizedLoaded, RouterLinkProps } from "vue-router"
-import { usePermissionStore } from "@/store/modules/permission"
-import { useTagsViewStore } from "@/store/modules/tagsView"
-import { useAppStore } from "@/store/modules/app"
-import { useI18n } from "vue-i18n"
-import { useDesign } from "@/hooks/useDesign"
-import { useTemplateRefsList } from "@vueuse/core"
-import { ElDropdown, ElScrollbar } from "element-plus"
-import { useScrollTo } from "@/hooks/useScrollTo"
-import { useTagsView } from "@/hooks/useTagsView"
-import { cloneDeep } from "lodash-es"
-import { AppRouteRecordRaw } from "@/router/types"
-import { pathResolve } from "@/router/helper"
-import ContextMenu from "./TagsView/ContextMenu.vue"
+import { onMounted, watch, computed, unref, ref, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
+import type { RouteLocationNormalizedLoaded, RouterLinkProps } from 'vue-router'
+import { usePermissionStore } from '@/store/modules/permission'
+import { useTagsViewStore } from '@/store/modules/tagsView'
+import { useAppStore } from '@/store/modules/app'
+import { useI18n } from 'vue-i18n'
+import { useDesign } from '@/hooks/useDesign'
+import { useTemplateRefsList } from '@vueuse/core'
+import { ElDropdown, ElScrollbar } from 'element-plus'
+import { useScrollTo } from '@/hooks/useScrollTo'
+import { useTagsView } from '@/hooks/useTagsView'
+import { cloneDeep } from 'lodash-es'
+import { AppRouteRecordRaw } from '@/router/types'
+import { pathResolve } from '@/router/helper'
+import ContextMenu from './TagsView/ContextMenu.vue'
 
 const { getPrefixCls } = useDesign()
 
-const prefixCls = getPrefixCls("tags-view")
+const prefixCls = getPrefixCls('tags-view')
 
 const { t } = useI18n()
 
@@ -46,9 +46,9 @@ const tagsViewIcon = computed(() => appStore.getTagsViewIcon)
 
 const isDark = computed(() => appStore.getIsDark)
 
-const filterAffixTags = (routes: AppRouteRecordRaw[], parentPath = "") => {
+const filterAffixTags = (routes: AppRouteRecordRaw[], parentPath = '') => {
   let tags: RouteLocationNormalizedLoaded[] = []
-  routes.forEach(route => {
+  routes.forEach((route) => {
     const meta = route.meta ?? {}
     const tagPath = pathResolve(parentPath, route.path)
     if (meta?.affix) {
@@ -172,24 +172,24 @@ const moveToTarget = (currentTag: RouteLocationNormalizedLoaded) => {
     // 直接滚动到0的位置
     const { start } = useScrollTo({
       el: wrap$!,
-      position: "scrollLeft",
+      position: 'scrollLeft',
       to: 0,
-      duration: 500,
+      duration: 500
     })
     start()
   } else if ((lastTag?.to as RouteLocationNormalizedLoaded).fullPath === currentTag.fullPath) {
     // 滚动到最后的位置
     const { start } = useScrollTo({
       el: wrap$!,
-      position: "scrollLeft",
+      position: 'scrollLeft',
       to: wrap$!.scrollWidth - wrap$!.offsetWidth,
-      duration: 500,
+      duration: 500
     })
     start()
   } else {
     // find preTag and nextTag
     const currentIndex: number = tagList.findIndex(
-      item => (item?.to as RouteLocationNormalizedLoaded).fullPath === currentTag.fullPath
+      (item) => (item?.to as RouteLocationNormalizedLoaded).fullPath === currentTag.fullPath
     )
     const tgsRefs = document.getElementsByClassName(`${prefixCls}__item`)
 
@@ -205,17 +205,17 @@ const moveToTarget = (currentTag: RouteLocationNormalizedLoaded) => {
     if (afterNextTagOffsetLeft > unref(scrollLeftNumber) + wrap$!.offsetWidth) {
       const { start } = useScrollTo({
         el: wrap$!,
-        position: "scrollLeft",
+        position: 'scrollLeft',
         to: afterNextTagOffsetLeft - wrap$!.offsetWidth,
-        duration: 500,
+        duration: 500
       })
       start()
     } else if (beforePrevTagOffsetLeft < unref(scrollLeftNumber)) {
       const { start } = useScrollTo({
         el: wrap$!,
-        position: "scrollLeft",
+        position: 'scrollLeft',
         to: beforePrevTagOffsetLeft,
-        duration: 500,
+        duration: 500
       })
       start()
     }
@@ -264,9 +264,9 @@ const move = (to: number) => {
   const wrap$ = unref(scrollbarRef)?.wrapRef
   const { start } = useScrollTo({
     el: wrap$!,
-    position: "scrollLeft",
+    position: 'scrollLeft',
     to: unref(scrollLeftNumber) + to,
-    duration: 500,
+    duration: 500
   })
   start()
 }
@@ -296,7 +296,11 @@ watch(
 </script>
 
 <template>
-  <div :id="prefixCls" :class="prefixCls" class="flex w-full relative bg-[#fff] dark:bg-[var(--el-bg-color)]">
+  <div
+    :id="prefixCls"
+    :class="prefixCls"
+    class="flex w-full relative bg-[#fff] dark:bg-[var(--el-bg-color)]"
+  >
     <span
       :class="`${prefixCls}__tool ${prefixCls}__tool--first`"
       class="w-[var(--tags-view-height)] h-[var(--tags-view-height)] flex items-center justify-center cursor-pointer"
@@ -320,7 +324,7 @@ watch(
                 disabled: selectedTag?.fullPath !== item.fullPath,
                 command: () => {
                   refreshSelectedTag(item)
-                },
+                }
               },
               {
                 icon: 'ant-design:close-outlined',
@@ -328,7 +332,7 @@ watch(
                 disabled: !!visitedViews?.length && selectedTag?.meta.affix,
                 command: () => {
                   closeSelectedTag(item)
-                },
+                }
               },
               {
                 divided: true,
@@ -336,10 +340,11 @@ watch(
                 label: t('tagsView.closeTheLeftTab'),
                 disabled:
                   !!visitedViews?.length &&
-                  (item.fullPath === visitedViews[0].fullPath || selectedTag?.fullPath !== item.fullPath),
+                  (item.fullPath === visitedViews[0].fullPath ||
+                    selectedTag?.fullPath !== item.fullPath),
                 command: () => {
                   closeLeftTags()
-                },
+                }
               },
               {
                 icon: 'ant-design:vertical-left-outlined',
@@ -350,7 +355,7 @@ watch(
                     selectedTag?.fullPath !== item.fullPath),
                 command: () => {
                   closeRightTags()
-                },
+                }
               },
               {
                 divided: true,
@@ -359,15 +364,15 @@ watch(
                 disabled: selectedTag?.fullPath !== item.fullPath,
                 command: () => {
                   closeOthersTags()
-                },
+                }
               },
               {
                 icon: 'ant-design:line-outlined',
                 label: t('tagsView.closeAll'),
                 command: () => {
                   closeAllTags()
-                },
-              },
+                }
+              }
             ]"
             v-for="item in visitedViews"
             :key="item.fullPath"
@@ -376,14 +381,17 @@ watch(
               `${prefixCls}__item`,
               item?.meta?.affix ? `${prefixCls}__item--affix` : '',
               {
-                'is-active': isActive(item),
-              },
+                'is-active': isActive(item)
+              }
             ]"
             @visible-change="visibleChange"
           >
             <div>
               <router-link :ref="tagLinksRefs.set" :to="{ ...item }" custom v-slot="{ navigate }">
-                <div @click="navigate" class="h-full flex justify-center items-center whitespace-nowrap pl-15px">
+                <div
+                  @click="navigate"
+                  class="h-full flex justify-center items-center whitespace-nowrap pl-15px"
+                >
                   <Icon
                     v-if="canShowIcon(item)"
                     :icon="item?.matched?.[1]?.meta?.icon || item?.meta?.icon"
@@ -496,7 +504,7 @@ watch(
 </template>
 
 <style lang="less" scoped>
-@prefix-cls: ~"@{adminNamespace}-tags-view";
+@prefix-cls: ~'@{adminNamespace}-tags-view';
 
 .@{prefix-cls} {
   :deep(.@{elNamespace}-scrollbar__view) {
@@ -504,7 +512,7 @@ watch(
   }
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -515,7 +523,7 @@ watch(
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: 0;
@@ -533,9 +541,9 @@ watch(
       top: 1px;
       left: 0;
       width: 100%;
-      height: calc(~"100% - 1px");
+      height: calc(~'100% - 1px');
       border-left: 1px solid var(--el-border-color);
-      content: "";
+      content: '';
     }
 
     &--first {
@@ -544,10 +552,10 @@ watch(
         top: 1px;
         left: 0;
         width: 100%;
-        height: calc(~"100% - 1px");
+        height: calc(~'100% - 1px');
         border-right: 1px solid var(--el-border-color);
         border-left: none;
-        content: "";
+        content: '';
       }
     }
   }
@@ -555,7 +563,7 @@ watch(
   &__item {
     position: relative;
     top: 2px;
-    height: calc(~"100% - 6px");
+    height: calc(~'100% - 6px');
     padding-right: 25px;
     margin-left: 4px;
     font-size: 12px;

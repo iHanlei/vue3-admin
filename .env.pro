@@ -2,7 +2,7 @@
 VITE_NODE_ENV=pro
 
 # 接口前缀
-VITE_API_BASE_PATH=
+VITE_API_BASE_PATH=https://gw.hambit.co/api/v1/hambit/hambit-work-order
 
 # 打包路径
 VITE_BASE_PATH=/

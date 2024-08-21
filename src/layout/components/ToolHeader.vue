@@ -1,16 +1,16 @@
 <script lang="tsx">
-import { defineComponent, computed } from "vue"
-import { useAppStore } from "@/store/modules/app"
-import { useDesign } from "@/hooks/useDesign"
-import Collapse from "./ToolHeader/Collapse.vue"
-import LocaleDropdown from "./ToolHeader/LocaleDropdown.vue"
-import UserInfo from "./ToolHeader/UserInfo.vue"
-import ScreenFull from "./ToolHeader/ScreenFull.vue"
-import Breadcrumb from "./ToolHeader/Breadcrumb.vue"
+import { defineComponent, computed } from 'vue'
+import { useAppStore } from '@/store/modules/app'
+import { useDesign } from '@/hooks/useDesign'
+import Collapse from './ToolHeader/Collapse.vue'
+import LocaleDropdown from './ToolHeader/LocaleDropdown.vue'
+import UserInfo from './ToolHeader/UserInfo.vue'
+import ScreenFull from './ToolHeader/ScreenFull.vue'
+import Breadcrumb from './ToolHeader/Breadcrumb.vue'
 
 const { getPrefixCls, variables } = useDesign()
 
-const prefixCls = getPrefixCls("tool-header")
+const prefixCls = getPrefixCls('tool-header')
 
 const appStore = useAppStore()
 
@@ -27,14 +27,14 @@ const screenFull = computed(() => appStore.getScreenFull)
 const locale = computed(() => appStore.getLocale)
 
 export default defineComponent({
-  name: "ToolHeader",
+  name: 'ToolHeader',
   setup() {
     return () => (
       <div
         id={`${variables.namespace}-tool-header`}
         class={[
           prefixCls,
-          "h-[var(--top-tool-height)] relative px-0 flex items-center justify-between",
+          'h-[var(--top-tool-height)] relative px-0 flex items-center justify-between'
         ]}
       >
         <div class="h-full flex items-center">
@@ -48,18 +48,21 @@ export default defineComponent({
             <ScreenFull class="custom-hover" color="var(--top-header-text-color)"></ScreenFull>
           ) : undefined}
           {locale.value ? (
-            <LocaleDropdown class="custom-hover" color="var(--top-header-text-color)"></LocaleDropdown>
+            <LocaleDropdown
+              class="custom-hover"
+              color="var(--top-header-text-color)"
+            ></LocaleDropdown>
           ) : undefined}
           <UserInfo></UserInfo>
         </div>
       </div>
     )
-  },
+  }
 })
 </script>
 
 <style lang="less" scoped>
-@prefix-cls: ~"@{adminNamespace}-tool-header";
+@prefix-cls: ~'@{adminNamespace}-tool-header';
 
 .@{prefix-cls} {
   transition: left 0.2s;

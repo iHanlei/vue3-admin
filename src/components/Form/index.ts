@@ -30,7 +30,6 @@ export type {
   FormSchema,
   FormProps,
   PlaceholderModel,
-  InputPasswordComponentProps,
   TreeSelectComponentProps
 } from './src/types'
 

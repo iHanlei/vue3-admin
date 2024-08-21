@@ -1,30 +1,32 @@
 // types/globals.d.ts
 
-import { TableColumn as ImportedTableColumn } from "@/components/Table";
+import { TableColumn as ImportedTableColumn } from '@/components/Table'
+import { FormSchema as ImportedFormSchema } from '@/components/Form/src/types'
 declare global {
   interface Fn<T = any> {
-    (...arg: T[]): T;
+    (...arg: T[]): T
   }
 
-  declare type Nullable<T> = T | null;
+  declare type Nullable<T> = T | null
 
-  declare type ElRef<T extends HTMLElement = HTMLDivElement> = Nullable<T>;
+  declare type ElRef<T extends HTMLElement = HTMLDivElement> = Nullable<T>
 
-  declare type Recordable<
-    T = any,
-    K extends string | number | symbol = string,
-  > = Record<K extends null | undefined ? string : K, T>;
+  declare type Recordable<T = any, K extends string | number | symbol = string> = Record<
+    K extends null | undefined ? string : K,
+    T
+  >
 
-  declare type ComponentRef<T extends abstract new (...args: any) => any> =
-    InstanceType<T>;
+  declare type ComponentRef<T extends abstract new (...args: any) => any> = InstanceType<T>
 
-  declare type LayoutType = "classic";
+  declare type LayoutType = 'classic'
 
-  declare type TimeoutHandle = ReturnType<typeof setTimeout>;
+  declare type TimeoutHandle = ReturnType<typeof setTimeout>
 
-  declare type IntervalHandle = ReturnType<typeof setInterval>;
+  declare type IntervalHandle = ReturnType<typeof setInterval>
 
-  declare type TableColumn = ImportedTableColumn;
+  declare type TableColumn = ImportedTableColumn
+
+  declare type FormSchema = ImportedFormSchema
 }
 
-export {};
+export {}

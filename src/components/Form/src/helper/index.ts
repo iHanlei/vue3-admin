@@ -1,8 +1,8 @@
-import i18n from "@/locales"
-import { PlaceholderModel, FormSchema, ComponentNameEnum, ColProps } from "../types"
-import { isFunction } from "@/utils/is"
-import { firstUpperCase, humpToDash } from "@/utils"
-import { set, get } from "lodash-es"
+import i18n from '@/locales'
+import { PlaceholderModel, FormSchema, ComponentNameEnum, ColProps } from '../types'
+import { isFunction } from '@/utils/is'
+import { firstUpperCase, humpToDash } from '@/utils'
+import { set, get } from 'lodash-es'
 
 const { t } = i18n.global
 
@@ -13,33 +13,40 @@ const { t } = i18n.global
  * @description 用于自动设置placeholder
  */
 export const setTextPlaceholder = (schema: FormSchema): PlaceholderModel => {
-  const textMap = [ComponentNameEnum.INPUT, ComponentNameEnum.AUTOCOMPLETE, ComponentNameEnum.INPUT_NUMBER]
+  const textMap = [
+    ComponentNameEnum.INPUT,
+    ComponentNameEnum.AUTOCOMPLETE,
+    ComponentNameEnum.INPUT_NUMBER
+  ]
   const selectMap = [
     ComponentNameEnum.SELECT,
     ComponentNameEnum.TIME_PICKER,
     ComponentNameEnum.DATE_PICKER,
     ComponentNameEnum.TIME_SELECT,
-    ComponentNameEnum.SELECT_V2,
+    ComponentNameEnum.SELECT_V2
   ]
   if (textMap.includes(schema?.component as ComponentNameEnum)) {
     return {
-      placeholder: t("common.inputText"),
+      placeholder: t('common.inputText')
     }
   }
   if (selectMap.includes(schema?.component as ComponentNameEnum)) {
     // 一些范围选择器
-    const twoTextMap = ["datetimerange", "daterange", "monthrange", "datetimerange", "daterange"]
+    const twoTextMap = ['datetimerange', 'daterange', 'monthrange', 'datetimerange', 'daterange']
     if (
-      twoTextMap.includes(((schema?.componentProps as any)?.type || (schema?.componentProps as any)?.isRange) as string)
+      twoTextMap.includes(
+        ((schema?.componentProps as any)?.type ||
+          (schema?.componentProps as any)?.isRange) as string
+      )
     ) {
       return {
-        startPlaceholder: t("common.startTimeText"),
-        endPlaceholder: t("common.endTimeText"),
-        rangeSeparator: "-",
+        startPlaceholder: t('common.startTimeText'),
+        endPlaceholder: t('common.endTimeText'),
+        rangeSeparator: '-'
       }
     } else {
       return {
-        placeholder: t("common.selectText"),
+        placeholder: t('common.selectText')
       }
     }
   }
@@ -62,9 +69,9 @@ export const setGridProp = (col: ColProps = {}): ColProps => {
           sm: 12,
           md: 12,
           lg: 12,
-          xl: 12,
+          xl: 12
         }),
-    ...col,
+    ...col
   }
   return colProps
 }
@@ -91,7 +98,7 @@ export const setComponentProps = (item: FormSchema): Recordable => {
   const componentProps: Recordable = {
     clearable: true,
     ...item.componentProps,
-    ...newOnEvents,
+    ...newOnEvents
   }
   // 需要删除额外的属性
   if (componentProps.slots) {
@@ -135,20 +142,24 @@ export const setItemComponentSlots = (slotsProps: Recordable = {}): Recordable =
  */
 export const initModel = (schema: FormSchema[], formModel: Recordable) => {
   const model: Recordable = { ...formModel }
-  schema.map(v => {
+  schema.map((v) => {
     if (v.remove) {
       delete model[v.field]
-    } else if (v.component !== "Divider") {
+    } else if (v.component !== 'Divider') {
       // const hasField = Reflect.has(model, v.field)
       const hasField = get(model, v.field)
       // 如果先前已经有值存在，则不进行重新赋值，而是采用现有的值
-      set(model, v.field, hasField !== void 0 ? get(model, v.field) : v.value !== void 0 ? v.value : undefined)
+      set(
+        model,
+        v.field,
+        hasField !== void 0 ? get(model, v.field) : v.value !== void 0 ? v.value : undefined
+      )
       // model[v.field] = hasField ? model[v.field] : v.value !== void 0 ? v.value : undefined
     }
   })
   // 如果 schema 对应的 field 不存在，则删除 model 中的对应的 field
-  Object.keys(model).forEach(key => {
-    const isExist = schema.some(item => item.field === key)
+  Object.keys(model).forEach((key) => {
+    const isExist = schema.some((item) => item.field === key)
     if (!isExist) {
       delete model[key]
     }

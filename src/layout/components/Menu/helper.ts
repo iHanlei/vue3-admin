@@ -1,5 +1,5 @@
-import { AppRouteRecordRaw } from "@/router/types"
-import { ref, unref } from "vue"
+import { AppRouteRecordRaw } from '@/router/types'
+import { ref, unref } from 'vue'
 
 type OnlyOneChildType = AppRouteRecordRaw & { noShowingChildren?: boolean }
 
@@ -14,7 +14,7 @@ export const hasOneShowingChild = (
 ): HasOneShowingChild => {
   const onlyOneChild = ref<OnlyOneChildType>()
 
-  const showingChildren = children.filter(v => {
+  const showingChildren = children.filter((v) => {
     const meta = v.meta ?? {}
     if (meta.hidden) {
       return false
@@ -29,21 +29,21 @@ export const hasOneShowingChild = (
   if (showingChildren.length === 1) {
     return {
       oneShowingChild: true,
-      onlyOneChild: unref(onlyOneChild),
+      onlyOneChild: unref(onlyOneChild)
     }
   }
 
   // Show parent if there are no child router to display
   if (!showingChildren.length) {
-    onlyOneChild.value = { ...parent, path: "", noShowingChildren: true }
+    onlyOneChild.value = { ...parent, path: '', noShowingChildren: true }
     return {
       oneShowingChild: true,
-      onlyOneChild: unref(onlyOneChild),
+      onlyOneChild: unref(onlyOneChild)
     }
   }
 
   return {
     oneShowingChild: false,
-    onlyOneChild: unref(onlyOneChild),
+    onlyOneChild: unref(onlyOneChild)
   }
 }

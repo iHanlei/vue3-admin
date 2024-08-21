@@ -1,24 +1,24 @@
 <script lang="tsx">
-import { computed, defineComponent, unref, PropType } from "vue"
-import { ElMenu, ElScrollbar } from "element-plus"
-import { useAppStore } from "@/store/modules/app"
-import { usePermissionStore } from "@/store/modules/permission"
-import { useRenderMenuItem } from "./Menu/useRenderMenuItem"
-import { useRouter } from "vue-router"
-import { isUrl } from "@/utils/is"
-import { useDesign } from "@/hooks/useDesign"
+import { computed, defineComponent, unref, PropType } from 'vue'
+import { ElMenu, ElScrollbar } from 'element-plus'
+import { useAppStore } from '@/store/modules/app'
+import { usePermissionStore } from '@/store/modules/permission'
+import { useRenderMenuItem } from './Menu/useRenderMenuItem'
+import { useRouter } from 'vue-router'
+import { isUrl } from '@/utils/is'
+import { useDesign } from '@/hooks/useDesign'
 
 const { getPrefixCls } = useDesign()
 
-const prefixCls = getPrefixCls("menu")
+const prefixCls = getPrefixCls('menu')
 
 export default defineComponent({
-  name: "Menu",
+  name: 'Menu',
   props: {
     menuSelect: {
       type: Function as PropType<(index: string) => void>,
-      default: undefined,
-    },
+      default: undefined
+    }
   },
   setup(props) {
     const appStore = useAppStore()
@@ -29,14 +29,14 @@ export default defineComponent({
 
     const permissionStore = usePermissionStore()
 
-    const menuMode = computed((): "vertical" | "horizontal" => {
+    const menuMode = computed((): 'vertical' | 'horizontal' => {
       // 竖
-      const vertical: LayoutType[] = ["classic"]
+      const vertical: LayoutType[] = ['classic']
 
       if (vertical.includes(unref(layout))) {
-        return "vertical"
+        return 'vertical'
       } else {
-        return "horizontal"
+        return 'horizontal'
       }
     })
 
@@ -81,7 +81,9 @@ export default defineComponent({
           textColor="var(--left-menu-text-color)"
           activeTextColor="var(--left-menu-text-active-color)"
           popperClass={
-            unref(menuMode) === "vertical" ? `${prefixCls}-popper--vertical` : `${prefixCls}-popper--horizontal`
+            unref(menuMode) === 'vertical'
+              ? `${prefixCls}-popper--vertical`
+              : `${prefixCls}-popper--horizontal`
           }
           onSelect={menuSelect}
         >
@@ -89,7 +91,7 @@ export default defineComponent({
             default: () => {
               const { renderMenuItem } = useRenderMenuItem()
               return renderMenuItem(unref(routers))
-            },
+            }
           }}
         </ElMenu>
       )
@@ -100,22 +102,22 @@ export default defineComponent({
         id={prefixCls}
         class={[
           `${prefixCls} ${prefixCls}__${unref(menuMode)}`,
-          "h-[100%] overflow-hidden flex-col bg-[var(--left-menu-bg-color)]",
+          'h-[100%] overflow-hidden flex-col bg-[var(--left-menu-bg-color)]',
           {
-            "w-[var(--left-menu-min-width)]": unref(collapse),
-            "w-[var(--left-menu-max-width)]": !unref(collapse),
-          },
+            'w-[var(--left-menu-min-width)]': unref(collapse),
+            'w-[var(--left-menu-max-width)]': !unref(collapse)
+          }
         ]}
       >
         {renderMenuWrap()}
       </div>
     )
-  },
+  }
 })
 </script>
 
 <style lang="less" scoped>
-@prefix-cls: ~"@{adminNamespace}-menu";
+@prefix-cls: ~'@{adminNamespace}-menu';
 
 .@{prefix-cls} {
   position: relative;
@@ -184,10 +186,10 @@ export default defineComponent({
 
   // 水平菜单
   &__horizontal {
-    height: calc(~"var(--top-tool-height)") !important;
+    height: calc(~'var(--top-tool-height)') !important;
 
     :deep(.@{elNamespace}-menu--horizontal) {
-      height: calc(~"var(--top-tool-height)");
+      height: calc(~'var(--top-tool-height)');
       border-bottom: none;
       // 重新设置底部高亮颜色
       & > .@{elNamespace}-sub-menu.is-active {
@@ -206,9 +208,9 @@ export default defineComponent({
 
       .@{prefix-cls}__title {
         /* stylelint-disable-next-line */
-        max-height: calc(~"var(--top-tool-height) - 2px") !important;
+        max-height: calc(~'var(--top-tool-height) - 2px') !important;
         /* stylelint-disable-next-line */
-        line-height: calc(~"var(--top-tool-height) - 2px");
+        line-height: calc(~'var(--top-tool-height) - 2px');
       }
     }
   }
@@ -216,7 +218,7 @@ export default defineComponent({
 </style>
 
 <style lang="less">
-@prefix-cls: ~"@{adminNamespace}-menu-popper";
+@prefix-cls: ~'@{adminNamespace}-menu-popper';
 
 .@{prefix-cls}--vertical,
 .@{prefix-cls}--horizontal {

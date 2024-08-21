@@ -5,8 +5,8 @@ import type {
   AxiosInstance,
   AxiosRequestHeaders,
   AxiosError,
-  RawAxiosRequestHeaders,
-} from "axios"
+  RawAxiosRequestHeaders
+} from 'axios'
 
 interface RequestInterceptors<T> {
   // 请求拦截
@@ -21,9 +21,9 @@ interface RequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
   interceptors?: RequestInterceptors<T>
 }
 
-type AxiosMethod = "get" | "post" | "delete" | "put"
+type AxiosMethod = 'get' | 'post' | 'delete' | 'put'
 
-type AxiosResponseType = "arraybuffer" | "blob" | "document" | "json" | "text" | "stream"
+type AxiosResponseType = 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream'
 
 declare interface AxiosConfig {
   params?: any
@@ -41,4 +41,11 @@ declare interface IResponse<T = any> {
 
 export { AxiosResponse, AxiosInstance, InternalAxiosRequestConfig, AxiosRequestHeaders, AxiosError }
 
-export type { RequestInterceptors, RequestConfig, AxiosConfig, AxiosMethod, AxiosResponseType, IResponse }
+export type {
+  RequestInterceptors,
+  RequestConfig,
+  AxiosConfig,
+  AxiosMethod,
+  AxiosResponseType,
+  IResponse
+}

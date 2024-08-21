@@ -1,20 +1,40 @@
 export type QueryWorkOrderType = {
-  page: number
-  size: number
+  page?: number
+  size?: number
+  workOrderId?: string
+  workOrderLevelList?: string[]
+  workOrderStatusList?: string[]
+  workOrderTypeList?: string[]
+  backstageTypeList?: string[]
+  handlers?: string
+  createUser?: string
+  createTimeStart?: string
+  createTimeEnd?: string
 }
 
-export type OrderByIdType = {
-  orderId: string
+export type QueryWorkOrderTypeListType = {
+  backstageType?: number | string
+  workOrderType?: number | string
 }
 
 export type AddWorkOrderType = {
-  relatedPlatforms: string
-  handleItem: string
-  urgency: string
-  handleUser: string
-  userId: string
-  userEmail: string
-  remark?: string
+  id: string
+  email: string
+  backstageType: number | string
+  handlers: string
+  workOrderLevel: number | string
+  workOrderType: number | string
+  workOrderDesc?: string
 }
 
-export type UpdateWorkOrderType = {}
+export type UpdateReviewerType = {
+  workOrderId: string
+  handlers: string
+  workOrderDesc?: string
+}
+
+export type CheckWorkOrderType = {
+  workOrderId: string
+  workOrderStatus: number
+  workOrderDesc?: string
+}

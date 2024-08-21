@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useIcon } from "@/hooks/useIcon"
-import { useI18n } from "vue-i18n"
+import { useIcon } from '@/hooks/useIcon'
+import { useI18n } from 'vue-i18n'
 
-const emit = defineEmits(["search", "reset", "expand"])
+const emit = defineEmits(['search', 'reset', 'expand'])
 
 const { t } = useI18n()
 
@@ -10,45 +10,45 @@ defineProps({
   // 是否显示搜索按钮
   showSearch: {
     type: Boolean,
-    default: true,
+    default: true
   },
   // 是否显示重置按钮
   showReset: {
     type: Boolean,
-    default: true,
+    default: true
   },
   // 是否显示展开/收起按钮
   showExpand: {
     type: Boolean,
-    default: false,
+    default: false
   },
   // 展开/收起状态
   visible: {
     type: Boolean,
-    default: true,
+    default: true
   },
   // 搜索按钮加载状态
   searchLoading: {
     type: Boolean,
-    default: false,
+    default: false
   },
   // 重置按钮加载状态
   resetLoading: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 })
 
 const onSearch = () => {
-  emit("search")
+  emit('search')
 }
 
 const onReset = () => {
-  emit("reset")
+  emit('reset')
 }
 
 const onExpand = () => {
-  emit("expand")
+  emit('expand')
 }
 </script>
 
@@ -60,7 +60,7 @@ const onExpand = () => {
     :icon="useIcon({ icon: 'ep:search' })"
     @click="onSearch"
   >
-    {{ t("common.search") }}
+    {{ t('common.search') }}
   </ElButton>
   <ElButton
     v-if="showReset"
@@ -69,14 +69,14 @@ const onExpand = () => {
     :icon="useIcon({ icon: 'ep:refresh-right' })"
     @click="onReset"
   >
-    {{ t("common.reset") }}
+    {{ t('common.reset') }}
   </ElButton>
   <ElButton
     v-if="showExpand"
-    :icon="useIcon({ icon: visible ? 'ep:arrow-up' : 'ep:arrow-down' })"
+    :icon="useIcon({ icon: visible ? 'ep:arrow-down' : 'ep:arrow-up' })"
     text
     @click="onExpand"
   >
-    {{ t(visible ? "common.shrink" : "common.expand") }}
+    {{ t(visible ? 'common.expand' : 'common.shrink') }}
   </ElButton>
 </template>

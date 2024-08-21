@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref } from "vue"
-import { ElInput } from "element-plus"
-import { resetRouter } from "@/router"
-import { useRouter } from "vue-router"
-import { useStorage } from "@/hooks/useStorage"
-import { useLockStore } from "@/store/modules/lock"
-import { useI18n } from "vue-i18n"
-import { useNow } from "@/hooks/useNow"
-import { useDesign } from "@/hooks/useDesign"
-import { useTagsViewStore } from "@/store/modules/tagsView"
+import { ref } from 'vue'
+import { ElInput } from 'element-plus'
+import { resetRouter } from '@/router'
+import { useRouter } from 'vue-router'
+import { useStorage } from '@/hooks/useStorage'
+import { useLockStore } from '@/store/modules/lock'
+import { useI18n } from 'vue-i18n'
+import { useNow } from '@/hooks/useNow'
+import { useDesign } from '@/hooks/useDesign'
+import { useTagsViewStore } from '@/store/modules/tagsView'
 
 const tagsViewStore = useTagsViewStore()
 
@@ -16,13 +16,13 @@ const { clearStorage } = useStorage()
 
 const { replace } = useRouter()
 
-const password = ref("")
+const password = ref('')
 const loading = ref(false)
 const errMsg = ref(false)
 const showDate = ref(true)
 
 const { getPrefixCls } = useDesign()
-const prefixCls = getPrefixCls("lock-page")
+const prefixCls = getPrefixCls('lock-page')
 
 const lockStore = useLockStore()
 
@@ -51,7 +51,7 @@ async function goLogin() {
   tagsViewStore.delAllViews()
   resetRouter() // 重置静态路由表
   lockStore.resetLockInfo()
-  replace("/login")
+  replace('/login')
 }
 
 function handleShowForm(show = false) {
@@ -60,7 +60,10 @@ function handleShowForm(show = false) {
 </script>
 
 <template>
-  <div :class="prefixCls" class="fixed inset-0 flex h-screen w-screen bg-black items-center justify-center">
+  <div
+    :class="prefixCls"
+    class="fixed inset-0 flex h-screen w-screen bg-black items-center justify-center"
+  >
     <div
       :class="`${prefixCls}__unlock`"
       class="absolute top-0 left-1/2 flex pt-5 h-16 items-center justify-center sm:text-md xl:text-xl text-white flex-col cursor-pointer transform translate-x-1/2"
@@ -68,7 +71,7 @@ function handleShowForm(show = false) {
       v-show="showDate"
     >
       <Icon icon="ep:lock" />
-      <span>{{ t("lock.unlock") }}</span>
+      <span>{{ t('lock.unlock') }}</span>
     </div>
 
     <div class="flex w-screen h-screen justify-center items-center">
@@ -89,9 +92,14 @@ function handleShowForm(show = false) {
             <img src="@/assets/svgs/avatar.svg" alt="" class="w-70px h-70px rounded-[50%]" />
             <span class="text-14px my-10px text-white">Evan</span>
           </div>
-          <ElInput type="password" :placeholder="t('lock.placeholder')" class="enter-x" v-model="password" />
+          <ElInput
+            type="password"
+            :placeholder="t('lock.placeholder')"
+            class="enter-x"
+            v-model="password"
+          />
           <span :class="`text-14px ${prefixCls}-entry__err-msg enter-x`" v-if="errMsg">
-            {{ t("lock.message") }}
+            {{ t('lock.message') }}
           </span>
           <div :class="`${prefixCls}-entry__footer enter-x`">
             <ElButton
@@ -102,13 +110,27 @@ function handleShowForm(show = false) {
               :disabled="loading"
               @click="handleShowForm(true)"
             >
-              {{ t("common.back") }}
+              {{ t('common.back') }}
             </ElButton>
-            <ElButton type="primary" size="small" class="mt-2 mr-2 enter-x" link :disabled="loading" @click="goLogin">
-              {{ t("lock.backToLogin") }}
+            <ElButton
+              type="primary"
+              size="small"
+              class="mt-2 mr-2 enter-x"
+              link
+              :disabled="loading"
+              @click="goLogin"
+            >
+              {{ t('lock.backToLogin') }}
             </ElButton>
-            <ElButton type="primary" class="mt-2" size="small" link @click="unLock()" :disabled="loading">
-              {{ t("lock.entrySystem") }}
+            <ElButton
+              type="primary"
+              class="mt-2"
+              size="small"
+              link
+              @click="unLock()"
+              :disabled="loading"
+            >
+              {{ t('lock.entrySystem') }}
             </ElButton>
           </div>
         </div>
@@ -126,7 +148,7 @@ function handleShowForm(show = false) {
 </template>
 
 <style lang="less" scoped>
-@prefix-cls: ~"@{adminNamespace}-lock-page";
+@prefix-cls: ~'@{adminNamespace}-lock-page';
 
 // Small screen / tablet
 @screen-sm: 576px;

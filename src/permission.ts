@@ -5,6 +5,7 @@ import { useNProgress } from '@/hooks/useNProgress'
 import { usePermissionStoreWithOut } from '@/store/modules/permission'
 import { usePageLoading } from '@/hooks/usePageLoading'
 import { useStorage } from './hooks/useStorage'
+import { useEnumStoreWithOut } from './store/modules/enum'
 
 const { start, done } = useNProgress()
 
@@ -16,7 +17,9 @@ router.beforeEach(async (to, from, next) => {
   start()
   loadStart()
   const permissionStore = usePermissionStoreWithOut()
-  if (getStorage('user')) {
+  const enumStore = useEnumStoreWithOut()
+
+  if (getStorage('token')) {
     if (to.path === '/login') {
       next({ path: '/' })
     } else {
@@ -30,15 +33,13 @@ router.beforeEach(async (to, from, next) => {
       permissionStore.getAddRouters.forEach((route) => {
         router.addRoute(route as unknown as RouteRecordRaw) // 动态添加可访问路由表
       })
-      permissionStore.setIsAddRouters(true)
       const redirectPath = from.query.redirect || to.path
       const redirect = decodeURIComponent(redirectPath as string)
-      // 避免重定向回当前路径，只有在路径确实不同的情况下才重定向
-      if (to.fullPath === redirect) {
-        next()
-      } else {
-        next({ path: redirect, replace: true }) // 添加 replace:true，避免在历史记录中重复
-      }
+      const nextData = to.path === redirect ? { ...to, replace: true } : { path: redirect }
+      permissionStore.setIsAddRouters(true)
+      // 更新枚举
+      await enumStore.getEnums()
+      next(nextData)
     }
   } else {
     const noRedirectWhiteList = ['/login']

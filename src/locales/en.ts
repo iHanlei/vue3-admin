@@ -11,8 +11,11 @@ export default {
     reset: 'Reset',
     shrink: 'Put away',
     expand: 'Expand',
+    operate: 'Operation',
     reminder: 'Reminder',
-    loginOutMessage: 'Exit the system?'
+    loginOutMessage: 'Exit the system?',
+    startTimeText: 'Start time',
+    endTimeText: 'End time'
   },
   lock: {
     lockScreen: 'Lock screen',

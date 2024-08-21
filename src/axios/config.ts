@@ -40,8 +40,8 @@ const defaultResponseInterceptors = (response: AxiosResponse) => {
   } else if (response.data.code === '200') {
     return response.data
   } else {
-    ElMessage.error(response?.data?.message)
-    if (response?.data?.code === 401) {
+    ElMessage.error(response?.data?.msg)
+    if (response?.data?.code === '401') {
       const userStore = useUserStoreWithOut()
       userStore.logout()
     }

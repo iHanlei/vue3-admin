@@ -26,10 +26,10 @@ export const rgbToHex = (r: number, g: number, b: number) => {
 }
 
 /**
-* 将十六进制颜色转换为其 RGB 表示形式
-* @param {string} hex 要转换的颜色
-* @returns 传递的颜色的 RGB 表示形式
-*/
+ * 将十六进制颜色转换为其 RGB 表示形式
+ * @param {string} hex 要转换的颜色
+ * @returns 传递的颜色的 RGB 表示形式
+ */
 export const hexToRGB = (hex: string, opacity?: number) => {
   let sHex = hex.toLowerCase()
   if (isHexColor(hex)) {
@@ -61,11 +61,11 @@ export const colorIsDark = (color: string) => {
 }
 
 /**
-* 根据传递的百分比使十六进制颜色变暗
-* @param {string} color 要处理的颜色
-* @param {number} amount 要更改颜色的数量
-* @returns {string} 已处理颜色的十六进制表示形式
-*/
+ * 根据传递的百分比使十六进制颜色变暗
+ * @param {string} color 要处理的颜色
+ * @param {number} amount 要更改颜色的数量
+ * @returns {string} 已处理颜色的十六进制表示形式
+ */
 export const darken = (color: string, amount: number) => {
   color = color.indexOf('#') >= 0 ? color.substring(1, color.length) : color
   amount = Math.trunc((255 * amount) / 100)
@@ -76,11 +76,11 @@ export const darken = (color: string, amount: number) => {
 }
 
 /**
-* 根据传递的百分比使 6 个字符的 HEX 颜色变亮
-* @param {string} color 要更改的颜色
-* @param {number} amount 要更改颜色的数量
-* @returns {string} 以 HEX 表示的处理后的颜色
-*/
+ * 根据传递的百分比使 6 个字符的 HEX 颜色变亮
+ * @param {string} color 要更改的颜色
+ * @param {number} amount 要更改颜色的数量
+ * @returns {string} 以 HEX 表示的处理后的颜色
+ */
 export const lighten = (color: string, amount: number) => {
   color = color.indexOf('#') >= 0 ? color.substring(1, color.length) : color
   amount = Math.trunc((255 * amount) / 100)
@@ -92,11 +92,11 @@ export const lighten = (color: string, amount: number) => {
 
 /* 总计表示颜色 (RR、GG 或 BB) 的十六进制百分比以进行显示 */
 /**
-* 将传递的百分比总计为十六进制颜色的 R、G 或 B
-* @param {string} color 要更改的颜色
-* @param {number} amount 要更改颜色的量
-* @returns {string} 颜色的处理部分
-*/
+ * 将传递的百分比总计为十六进制颜色的 R、G 或 B
+ * @param {string} color 要更改的颜色
+ * @param {number} amount 要更改颜色的量
+ * @returns {string} 颜色的处理部分
+ */
 const addLight = (color: string, amount: number) => {
   const cc = parseInt(color, 16) + amount
   const c = cc > 255 ? 255 : cc
@@ -104,11 +104,11 @@ const addLight = (color: string, amount: number) => {
 }
 
 /**
-* 计算 rgb 颜色的亮度
-* @param {number} r 红色
-* @param {number} g 绿色
-* @param {number} b 蓝色
-*/
+ * 计算 rgb 颜色的亮度
+ * @param {number} r 红色
+ * @param {number} g 绿色
+ * @param {number} b 蓝色
+ */
 const luminanace = (r: number, g: number, b: number) => {
   const a = [r, g, b].map((v) => {
     v /= 255
@@ -118,10 +118,10 @@ const luminanace = (r: number, g: number, b: number) => {
 }
 
 /**
-* 计算两种 rgb 颜色之间的对比度
-* @param {string} rgb1 rgb 颜色 1
-* @param {string} rgb2 rgb 颜色 2
-*/
+ * 计算两种 rgb 颜色之间的对比度
+ * @param {string} rgb1 rgb 颜色 1
+ * @param {string} rgb2 rgb 颜色 2
+ */
 const contrast = (rgb1: string[], rgb2: number[]) => {
   return (
     (luminanace(~~rgb1[0], ~~rgb1[1], ~~rgb1[2]) + 0.05) /
@@ -130,9 +130,9 @@ const contrast = (rgb1: string[], rgb2: number[]) => {
 }
 
 /**
-* 根据与背景的对比度确定最佳文本颜色（黑色或白色）
-* @param hexColor - 用户最后选择的颜色
-*/
+ * 根据与背景的对比度确定最佳文本颜色（黑色或白色）
+ * @param hexColor - 用户最后选择的颜色
+ */
 export const calculateBestTextColor = (hexColor: string) => {
   const rgbColor = hexToRGB(hexColor.substring(1))
   const contrastWithBlack = contrast(rgbColor.split(','), [0, 0, 0])
@@ -141,11 +141,11 @@ export const calculateBestTextColor = (hexColor: string) => {
 }
 
 /**
-* 将指定的百分比从十六进制颜色的 R、G 或 B 中减去
-* @param {string} color 要更改的颜色
-* @param {number} amount 要更改颜色的数量
-* @returns {string} 已处理的颜色部分
-*/
+ * 将指定的百分比从十六进制颜色的 R、G 或 B 中减去
+ * @param {string} color 要更改的颜色
+ * @param {number} amount 要更改颜色的数量
+ * @returns {string} 已处理的颜色部分
+ */
 const subtractLight = (color: string, amount: number) => {
   const cc = parseInt(color, 16) - amount
   const c = cc < 0 ? 0 : cc
@@ -153,13 +153,13 @@ const subtractLight = (color: string, amount: number) => {
 }
 
 /**
-* 混合两种颜色。
-*
-* @param {string} color1 - 第一种颜色，应为以 `#` 开头的 6 位十六进制颜色代码。
-* @param {string} color2 - 第二种颜色，应为以 `#` 开头的 6 位十六进制颜色代码。
-* @param {number} [weight=0.5] - 混合中 color1 的权重，应为 0 到 1 之间的数字，其中 0 代表 color2 的 100%，1 代表 color1 的 100%。
-* @returns {string} 混合后的颜色，应为以 `#` 开头的 6 位十六进制颜色代码。
-*/
+ * 混合两种颜色。
+ *
+ * @param {string} color1 - 第一种颜色，应为以 `#` 开头的 6 位十六进制颜色代码。
+ * @param {string} color2 - 第二种颜色，应为以 `#` 开头的 6 位十六进制颜色代码。
+ * @param {number} [weight=0.5] - 混合中 color1 的权重，应为 0 到 1 之间的数字，其中 0 代表 color2 的 100%，1 代表 color1 的 100%。
+ * @returns {string} 混合后的颜色，应为以 `#` 开头的 6 位十六进制颜色代码。
+ */
 export const mix = (color1: string, color2: string, weight: number = 0.5): string => {
   let color = '#'
   for (let i = 0; i <= 2; i++) {

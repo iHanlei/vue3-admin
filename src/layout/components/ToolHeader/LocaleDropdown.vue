@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import { ref } from "vue"
-import { ElDropdown, ElDropdownMenu, ElDropdownItem } from "element-plus"
-import { useStorage } from "@/hooks/useStorage"
-import { useI18n } from "vue-i18n"
-import { useDesign } from "@/hooks/useDesign"
+import { ref } from 'vue'
+import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
+import { useStorage } from '@/hooks/useStorage'
+import { useI18n } from 'vue-i18n'
+import { useDesign } from '@/hooks/useDesign'
 
 const { getPrefixCls } = useDesign()
 
-const prefixCls = getPrefixCls("locale-dropdown")
+const prefixCls = getPrefixCls('locale-dropdown')
 
 defineProps({
   color: {
     type: String,
-    default: "",
-  },
+    default: ''
+  }
 })
 
 const { locale } = useI18n()
 
-const { setStorage, getStorage } = useStorage("localStorage")
+const { setStorage, getStorage } = useStorage('localStorage')
 
-const language = ref<string>(getStorage("lang") === "zh-CN" ? "简体中文" : "English")
+const language = ref<string>(getStorage('lang') === 'zh-CN' ? '简体中文' : 'English')
 
-const setLang = (lang: "zh-CN" | "en") => {
+const setLang = (lang: 'zh-CN' | 'en') => {
   if (locale.value === lang) return
   locale.value = lang
-  language.value = lang === "zh-CN" ? "简体中文" : "English"
-  setStorage("lang", lang)
+  language.value = lang === 'zh-CN' ? '简体中文' : 'English'
+  setStorage('lang', lang)
   // 需要重新加载页面让整个系统都初始化
-  // window.location.reload()
+  window.location.reload()
 }
 </script>
 

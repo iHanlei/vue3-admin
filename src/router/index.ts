@@ -47,7 +47,7 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
         meta: {
           title: 'router.myWorkOrder'
         }
-      },
+      }
     ]
   },
   {

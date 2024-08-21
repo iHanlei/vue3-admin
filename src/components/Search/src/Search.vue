@@ -101,10 +101,10 @@ const formModel = ref<Recordable>(props.model)
 const newSchema = computed(() => {
   const propsComputed = unref(getProps)
   let schema: FormSchema[] = cloneDeep(propsComputed.schema)
-  if (propsComputed.showExpand && propsComputed.expandField && !unref(visible)) {
+  if (propsComputed.showExpand && propsComputed.expandField && unref(visible)) {
     const index = findIndex(schema, (v: FormSchema) => v.field === propsComputed.expandField)
     schema.map((v, i) => {
-      if (i >= index) {
+      if (i > index) {
         v.hidden = true
       } else {
         v.hidden = false
@@ -135,9 +135,6 @@ const newSchema = computed(() => {
                   />
                 </div>
               )
-            },
-            label: () => {
-              return <span>&nbsp;</span>
             }
           }
         }

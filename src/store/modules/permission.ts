@@ -1,9 +1,9 @@
-import { defineStore } from "pinia"
-import { constantRouterMap } from "@/router"
-import { generateRoutesByServer, flatMultiLevelRoutes } from "@/router/helper"
-import { store } from "../index"
-import { cloneDeep } from "lodash-es"
-import { AppCustomRouteRecordRaw, AppRouteRecordRaw } from "@/router/types"
+import { defineStore } from 'pinia'
+import { constantRouterMap } from '@/router'
+import { generateRoutesByServer, flatMultiLevelRoutes } from '@/router/helper'
+import { store } from '../index'
+import { cloneDeep } from 'lodash-es'
+import { AppCustomRouteRecordRaw, AppRouteRecordRaw } from '@/router/types'
 
 export interface PermissionState {
   routers: AppRouteRecordRaw[]
@@ -12,12 +12,15 @@ export interface PermissionState {
   menuTabRouters: AppRouteRecordRaw[]
 }
 
-export const usePermissionStore = defineStore("permission", {
+export const usePermissionStore = defineStore('permission', {
+  persist: {
+    paths: ['routers', 'addRouters', 'menuTabRouters']
+  },
   state: (): PermissionState => ({
     routers: [],
     addRouters: [],
     isAddRouters: false,
-    menuTabRouters: [],
+    menuTabRouters: []
   }),
   getters: {
     getRouters(): AppRouteRecordRaw[] {
@@ -31,13 +34,16 @@ export const usePermissionStore = defineStore("permission", {
     },
     getMenuTabRouters(): AppRouteRecordRaw[] {
       return this.menuTabRouters
-    },
+    }
   },
   actions: {
-    generateRoutes(type: "server" | "static", routers?: AppCustomRouteRecordRaw[] | string[]): Promise<unknown> {
-      return new Promise<void>(resolve => {
+    generateRoutes(
+      type: 'server' | 'static',
+      routers?: AppCustomRouteRecordRaw[] | string[]
+    ): Promise<unknown> {
+      return new Promise<void>((resolve) => {
         let routerMap: AppRouteRecordRaw[] = []
-        if (type === "server") {
+        if (type === 'server') {
           // 模拟后端过滤菜单
           routerMap = generateRoutesByServer(routers as AppCustomRouteRecordRaw[])
         } else {
@@ -56,11 +62,8 @@ export const usePermissionStore = defineStore("permission", {
     },
     setMenuTabRouters(routers: AppRouteRecordRaw[]): void {
       this.menuTabRouters = routers
-    },
-  },
-  persist: {
-    paths: ["routers", "addRouters", "menuTabRouters"],
-  },
+    }
+  }
 })
 
 export const usePermissionStoreWithOut = () => {

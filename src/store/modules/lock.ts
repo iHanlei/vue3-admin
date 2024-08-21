@@ -11,6 +11,7 @@ interface LockState {
 }
 
 export const useLockStore = defineStore('lock', {
+  persist: false,
   state: (): LockState => {
     return {
       lockInfo: {
@@ -39,7 +40,7 @@ export const useLockStore = defineStore('lock', {
         return false
       }
     }
-  },
+  }
 })
 
 export const useLockStoreWithOut = () => {

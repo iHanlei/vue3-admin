@@ -51,7 +51,7 @@ export enum ComponentNameEnum {
   TIME_SELECT = 'TimeSelect',
   SELECT_V2 = 'SelectV2',
   TREE_SELECT = 'TreeSelect',
-  UPLOAD = 'Upload',
+  UPLOAD = 'Upload'
 }
 
 type CamelCaseComponentName = keyof typeof ComponentNameEnum extends infer K

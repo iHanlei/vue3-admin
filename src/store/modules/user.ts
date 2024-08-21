@@ -1,70 +1,60 @@
-import { defineStore } from "pinia"
-import { store } from "../index"
-import { ElMessageBox } from "element-plus"
+import { defineStore } from 'pinia'
+import { store } from '../index'
+import { ElMessageBox } from 'element-plus'
 import i18n from '@/locales'
-import { useTagsViewStore } from "./tagsView"
-import router from "@/router"
-import { AppCustomRouteRecordRaw } from "@/router/types"
-import { useStorage } from "@/hooks/useStorage"
+import router from '@/router'
+import { getUserInfo } from '@/api/user'
+import type { UserInfoType } from '@/api/user/types'
+import { useTagsViewStore } from './tagsView'
+import { useStorage } from '@/hooks/useStorage'
 
 interface UserState {
-  userInfo?: any
-  tokenKey: string
-  token: string
-  roleRouters?: string[] | AppCustomRouteRecordRaw[]
+  userInfo?: UserInfoType
   rememberMe: boolean
 }
 
-const { setStorage } = useStorage('sessionStorage')
+const { setStorage, getStorage, removeStorage } = useStorage('sessionStorage')
 
-export const useUserStore = defineStore("user", {
+export const useUserStore = defineStore('user', {
+  persist: false,
   state: (): UserState => {
     return {
-      userInfo: undefined,
-      tokenKey: "Authorization",
-      token: "",
-      roleRouters: undefined,
+      userInfo: getStorage('user') || undefined,
       // 记住我
-      rememberMe: true,
+      rememberMe: true
     }
   },
   getters: {
-    getTokenKey(): string {
-      return this.tokenKey
-    },
-    getToken(): string {
-      return this.token
-    },
     getUserInfo(): any | undefined {
       return this.userInfo
     },
-    getRoleRouters(): string[] | AppCustomRouteRecordRaw[] | undefined {
-      return this.roleRouters
-    },
     getRememberMe(): boolean {
       return this.rememberMe
-    },
+    }
   },
   actions: {
-    setTokenKey(tokenKey: string) {
-      this.tokenKey = tokenKey
-    },
     setToken(token: string) {
-      this.token = token
+      setStorage('token', token)
     },
-    setUserInfo(userInfo?: any) {
-      this.userInfo = userInfo
-      setStorage('user', userInfo)
-    },
-    setRoleRouters(roleRouters: string[] | AppCustomRouteRecordRaw[]) {
-      this.roleRouters = roleRouters
+    setUserInfo() {
+      return new Promise((resolve, reject) => {
+        getUserInfo()
+          .then((res: any) => {
+            this.userInfo = res.data
+            setStorage('user', res.data)
+            resolve(res)
+          })
+          .catch((error: any) => {
+            reject(error)
+          })
+      })
     },
     logoutConfirm() {
       const { t } = i18n.global
-      ElMessageBox.confirm(t("common.loginOutMessage"), t("common.reminder"), {
-        confirmButtonText: t("common.ok"),
-        cancelButtonText: t("common.cancel"),
-        type: "warning",
+      ElMessageBox.confirm(t('common.loginOutMessage'), t('common.reminder'), {
+        confirmButtonText: t('common.ok'),
+        cancelButtonText: t('common.cancel'),
+        type: 'warning'
       })
         .then(() => {
           this.reset()
@@ -74,18 +64,17 @@ export const useUserStore = defineStore("user", {
     reset() {
       const tagsViewStore = useTagsViewStore()
       tagsViewStore.delAllViews()
-      this.setToken("")
-      this.setUserInfo(undefined)
-      this.setRoleRouters([])
-      router.replace("/login")
+      removeStorage('token')
+      removeStorage('user')
+      router.replace('/login')
     },
     logout() {
       this.reset()
     },
     setRememberMe(rememberMe: boolean) {
       this.rememberMe = rememberMe
-    },
-  },
+    }
+  }
 })
 
 export const useUserStoreWithOut = () => {

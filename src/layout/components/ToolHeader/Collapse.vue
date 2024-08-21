@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { computed, unref } from "vue"
-import { useAppStore } from "@/store/modules/app"
-import { useDesign } from "@/hooks/useDesign"
+import { computed, unref } from 'vue'
+import { useAppStore } from '@/store/modules/app'
+import { useDesign } from '@/hooks/useDesign'
 
 const { getPrefixCls } = useDesign()
 
-const prefixCls = getPrefixCls("collapse")
+const prefixCls = getPrefixCls('collapse')
 
 defineProps({
   color: {
     type: String,
-    default: "",
-  },
+    default: ''
+  }
 })
 
 const appStore = useAppStore()

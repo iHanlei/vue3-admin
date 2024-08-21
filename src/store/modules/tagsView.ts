@@ -13,6 +13,7 @@ export interface TagsViewState {
 }
 
 export const useTagsViewStore = defineStore('tagsView', {
+  persist: false,
   state: (): TagsViewState => ({
     visitedViews: [],
     cachedViews: new Set(),

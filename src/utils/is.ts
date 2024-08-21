@@ -5,7 +5,7 @@ export const is = (val: unknown, type: string) => {
 }
 
 export const isNumber = (val: unknown): val is number => {
-  return is(val, "Number")
+  return is(val, 'Number')
 }
 
 export const isString = (val: unknown): val is string => {

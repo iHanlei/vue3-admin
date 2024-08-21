@@ -1,18 +1,28 @@
 import request from '@/axios'
-import type { QueryWorkOrderType, OrderByIdType, AddWorkOrderType, UpdateWorkOrderType } from './types'
+import type {
+  QueryWorkOrderType,
+  QueryWorkOrderTypeListType,
+  AddWorkOrderType,
+  UpdateReviewerType,
+  CheckWorkOrderType
+} from './types'
 
 export const getWorkOrderList = (params: QueryWorkOrderType) => {
-  return request.get({ url: '/work/order/list', params })
+  return request.get({ url: '/query/getList', params })
 }
 
-export const getWorkOrderDetails = (params: OrderByIdType) => {
-  return request.get({ url: '/work/order/details', params })
+export const getWorkOrderTypeList = (params: QueryWorkOrderTypeListType) => {
+  return request.get({ url: '/query/orderTypeList', params })
 }
 
 export const addWorkOrder = (data: AddWorkOrderType) => {
-  return request.post({ url: '/add/work/order', data })
+  return request.post({ url: '/submit/add', data })
 }
 
-export const updateWorkOrder = (data: UpdateWorkOrderType) => {
-  return request.post({ url: '/update/work/order', data })
+export const updateReviewer = (data: UpdateReviewerType) => {
+  return request.post({ url: '/audit/designatedReviewer', data })
+}
+
+export const checkWorkOrder = (data: CheckWorkOrderType) => {
+  return request.post({ url: '/audit/reviewTickets', data })
 }

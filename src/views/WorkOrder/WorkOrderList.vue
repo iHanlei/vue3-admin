@@ -2,12 +2,17 @@
 import { computed, h, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/store/modules/app'
+import { useEnumStore } from '@/store/modules/enum'
 import { getWorkOrderList } from '@/api/work'
 import { QueryWorkOrderType } from '@/api/work/types'
 import { ElButton, ElTag } from 'element-plus'
 import WorkOrderDetail from './components/WorkOrderDetail.vue'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const localeSuffix = computed(() => (locale.value === 'zh-CN' ? '' : 'En'))
 
 const appStore = useAppStore()
 const mobile = computed(() => appStore.getMobile)
@@ -22,50 +27,22 @@ const tableData = ref<object[]>([])
 
 const loading = ref(false)
 
-const enumStatus = [
-  {
-    name: t('待处理'),
-    code: 1
-  },
-  {
-    name: t('已完结'),
-    code: 2
-  },
-  {
-    name: t('已退回'),
-    code: 3
-  },
-  {
-    name: t('已撤销'),
-    code: 4
-  }
-]
+const enumStore = useEnumStore()
+const enumWorkOrderStatus = computed(() => enumStore.enumList.EnumWorkOrderStatus)
+const enumWorkOrderLevel = computed(() => enumStore.enumList.EnumWorkOrderLevel)
+const enumWorkOrderType = computed(() => enumStore.enumList.EnumWorkOrderType)
+const enumBackstageType = computed(() => enumStore.enumList.EnumBackstageType)
 
-const enumStatusTag = {
-  1: '',
-  2: 'success',
-  3: 'error',
-  4: 'warning'
+const enumWorkOrderStatusTag = {
+  1: 'info', // 待审核
+  2: 'info', // 已撤回
+  4: 'danger', // 审核退回
+  8: '', // 处理中
+  16: 'success', // 处理完成
+  32: 'warning', // 重开工单
+  64: 'warning', // 补充数据
+  128: 'success' // 关闭工单
 }
-
-const enumUrgency = [
-  {
-    name: t('重要'),
-    code: 1
-  },
-  {
-    name: t('紧急'),
-    code: 2
-  },
-  {
-    name: t('普通'),
-    code: 3
-  },
-  {
-    name: t('较低'),
-    code: 4
-  }
-]
 
 const columns: TableColumn[] = [
   {
@@ -79,8 +56,8 @@ const columns: TableColumn[] = [
     minWidth: '150'
   },
   {
-    field: '工单处理项',
-    label: t('工单处理项'),
+    field: '工单类型',
+    label: t('工单类型'),
     minWidth: '150'
   },
   {
@@ -96,9 +73,10 @@ const columns: TableColumn[] = [
       return h(
         ElTag,
         {
-          type: enumStatusTag[status]
+          type: enumWorkOrderStatusTag[status]
         },
-        () => enumStatus.find((et) => et.code === status)?.name
+        () =>
+          enumWorkOrderStatus.value.find((et) => et.code === status)?.[`name${localeSuffix.value}`]
       )
     }
   },
@@ -127,34 +105,66 @@ const columns: TableColumn[] = [
 
 const schema = reactive<FormSchema[]>([
   {
-    field: '搜索关键词',
-    label: t('搜索关键词'),
-    component: 'Input'
-  },
-  {
-    field: '工单状态',
-    label: t('工单状态'),
+    field: 'backstageTypeList',
+    label: t('关联平台'),
     component: 'Select',
     componentProps: {
-      options: enumStatus.map((item) => {
+      options: enumBackstageType.value.map((item) => {
         return {
           value: item.code,
-          label: item.name
+          label: item[`name${localeSuffix.value}`]
         }
       })
     }
   },
   {
-    field: '紧要程度',
+    field: 'workOrderTypeList',
+    label: t('工单类型'),
+    component: 'Select',
+    componentProps: {
+      options: enumWorkOrderType.value.map((item) => {
+        return {
+          value: item.code,
+          label: item[`name${localeSuffix.value}`]
+        }
+      })
+    }
+  },
+  {
+    field: 'workOrderStatusList',
+    label: t('工单状态'),
+    component: 'Select',
+    componentProps: {
+      options: enumWorkOrderStatus.value.map((item) => {
+        return {
+          value: item.code,
+          label: item[`name${localeSuffix.value}`]
+        }
+      })
+    }
+  },
+  {
+    field: 'workOrderLevelList',
     label: t('紧要程度'),
     component: 'Select',
     componentProps: {
-      options: enumUrgency.map((item) => {
+      options: enumWorkOrderLevel.value.map((item) => {
         return {
           value: item.code,
-          label: item.name
+          label: item[`name${localeSuffix.value}`]
         }
       })
+    }
+  },
+  {
+    field: 'createTime',
+    label: t('创建时间'),
+    component: 'DatePicker',
+    componentProps: {
+      type: 'datetimerange',
+      format: 'YYYY-MM-DD HH:mm:ss',
+      valueFormat: 'YYYY-MM-DD HH:mm:ss',
+      defaultTime: [new Date(2023, 1, 1, 0, 0, 0), new Date(2023, 1, 1, 23, 59, 59)]
     }
   }
 ])
@@ -163,7 +173,18 @@ const searchLoading = ref<boolean>(false)
 const search = (val) => {
   if (!val) return
 
-  queryParams.value = Object.assign(queryParams.value, val)
+  if (val.createTime) {
+    queryParams.value.createTimeStart = dayjs(val.createTime[0]).startOf('day').utc().format()
+    queryParams.value.createTimeEnd = dayjs(val.createTime[1]).endOf('day').utc().format()
+  } else {
+    queryParams.value.createTimeStart = undefined
+    queryParams.value.createTimeEnd = undefined
+  }
+
+  const newVal = Object.assign({}, val)
+  delete newVal.createTime
+
+  queryParams.value = Object.assign(queryParams.value, newVal)
   queryParams.value.page = 1
 
   searchLoading.value = true
@@ -211,10 +232,11 @@ getList()
   <template v-if="showDetail">
     <WorkOrderDetail :detailId="detailId" @update="getList" @close="showDetail = false" />
   </template>
-  <ContentWrap :breads="[t('router.workOrderManagement'), t('router.workOrderList')]" v-else>
+  <div v-else>
     <Search
       :schema="schema"
-      :expand="false"
+      :showExpand="true"
+      expandField="workOrderTypeList"
       :searchLoading="searchLoading"
       :resetLoading="resetLoading"
       @search="search"
@@ -235,5 +257,5 @@ getList()
         </ElButton>
       </template>
     </Table>
-  </ContentWrap>
+  </div>
 </template>

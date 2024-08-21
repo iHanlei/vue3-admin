@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import pageError from "@/assets/svgs/404.svg"
-import networkError from "@/assets/svgs/500.svg"
-import noPermission from "@/assets/svgs/403.svg"
-import { useI18n } from "vue-i18n"
+import pageError from '@/assets/svgs/404.svg'
+import networkError from '@/assets/svgs/500.svg'
+import noPermission from '@/assets/svgs/403.svg'
+import { useI18n } from 'vue-i18n'
 
 interface ErrorMap {
   img: string
@@ -15,36 +15,36 @@ const { t } = useI18n()
 const errorMap: {
   [key: string]: ErrorMap
 } = {
-  "404": {
+  '404': {
     img: pageError,
-    message: t("error.pageError"),
-    buttonText: t("error.returnToHome"),
+    message: t('error.pageError'),
+    buttonText: t('error.returnToHome')
   },
-  "500": {
+  '500': {
     img: networkError,
-    message: t("error.networkError"),
-    buttonText: t("error.returnToHome"),
+    message: t('error.networkError'),
+    buttonText: t('error.returnToHome')
   },
-  "403": {
+  '403': {
     img: noPermission,
-    message: t("error.noPermission"),
-    buttonText: t("error.returnToHome"),
-  },
+    message: t('error.noPermission'),
+    buttonText: t('error.returnToHome')
+  }
 }
 
 const props = defineProps({
   type: {
     validator(value: string) {
-      return ["404", "500", "403"].includes(value)
+      return ['404', '500', '403'].includes(value)
     },
-    default: "404",
-  },
+    default: '404'
+  }
 })
 
-const emit = defineEmits(["errorClick"])
+const emit = defineEmits(['errorClick'])
 
 const btnClick = () => {
-  emit("errorClick", props.type)
+  emit('errorClick', props.type)
 }
 </script>
 

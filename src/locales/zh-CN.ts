@@ -11,8 +11,11 @@ export default {
     reset: '重置',
     shrink: '收起',
     expand: '展开',
+    operate: '操作',
     reminder: '温馨提示',
-    loginOutMessage: '是否退出本系统？'
+    loginOutMessage: '是否退出本系统？',
+    startTimeText: '开始时间',
+    endTimeText: '结束时间'
   },
   lock: {
     lockScreen: '锁定屏幕',

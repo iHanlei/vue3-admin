@@ -2,7 +2,7 @@
 import { ElDescriptions, ElDescriptionsItem, ElButton, ElSteps, ElStep, ElCard } from 'element-plus'
 import { useWindowSize } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
-import { getWorkOrderDetails } from '@/api/work'
+import { getWorkOrderList } from '@/api/work'
 import { ref } from 'vue'
 
 const { t } = useI18n()
@@ -23,8 +23,8 @@ const workData = ref()
 const loading = ref<boolean>(false)
 const getDetails = () => {
   loading.value = true
-  getWorkOrderDetails({
-    orderId: props.detailId
+  getWorkOrderList({
+    workOrderId: props.detailId
   })
     .then((res) => {
       if (res && res.data) {
@@ -40,9 +40,7 @@ getDetails()
 </script>
 
 <template>
-  <ContentWrap
-    :breads="[t('router.workOrderManagement'), t('router.workOrderList'), t('common.details')]"
-  >
+  <div>
     <div class="flex justify-between mb-5 overflow-x-auto">
       <ElButton @click="emit('close')" class="mr-3">
         <Icon icon="material-symbols:arrow-back-ios-new-rounded" class="mr-[5px]" />
@@ -72,8 +70,8 @@ getDetails()
       <ElDescriptionsItem :label="t('关联平台')">
         {{ '关联平台' }}
       </ElDescriptionsItem>
-      <ElDescriptionsItem :label="t('工单处理项')">
-        {{ '工单处理项' }}
+      <ElDescriptionsItem :label="t('工单类型')">
+        {{ '工单类型' }}
       </ElDescriptionsItem>
       <ElDescriptionsItem :label="t('处理人员')">
         {{ '处理人员' }}
@@ -124,5 +122,5 @@ getDetails()
         </template>
       </ElStep>
     </ElSteps>
-  </ContentWrap>
+  </div>
 </template>
